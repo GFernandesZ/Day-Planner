@@ -1,0 +1,58 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.table th {
+    background-color: #dc3545;
+    /* vermelho */
+    color: white;
+}
+
+.table td {
+    vertical-align: middle;
+}
+
+.container {
+    margin-top: 50px;
+}
+
+h1,
+h2,
+.text-danger {
+    color: #dc3545;
+}
+
+.custom-btn {
+    background-color: #dc3545;
+    color: white;
+    border-radius: 8px;
+    padding: 10px 20px;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: 500;
+}
+
+.custom-btn:hover {
+    background-color: #bd2130;
+    transform: scale(1.02);
+    color: #fff;
+}
+
+.custom-btn-logout {
+    color: rgb(205, 34, 34);
+    border-radius: 8px;
+    padding: 10px 20px;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+/* NOVAS CLASSES OPCIONAIS (caso queira mais controle depois) */
+.form-label {
+    font-weight: 500;
+    color: #333;
+}
+
+.form-control:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}

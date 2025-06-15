@@ -1,0 +1,242 @@
+{% load static %} {# Carrega a tag 'static' para lidar com arquivos estáticos como CSS #}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Day Planner - Sua Agenda</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}"> {# Seu arquivo CSS combinado #}
+    {# Se estiver usando Bootstrap (ou outro framework), adicione os links aqui #}
+    {#
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> #}
+</head>
+
+<body>
+    <div class="main-wrapper">
+        {# Barra Lateral de Navegação #}
+        <aside class="sidebar">
+            <div class="logo">
+                <img src="{% static 'images/day_planner_logo_white.png' %}" alt="Day Planner Logo"> {# Ajuste o caminho
+                da imagem #}
+            </div>
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="#" class="active"><img src="{% static 'icons/home_icon.png' %}" alt="Home"> Início</a>
+                    </li> {# Substitua por ícones reais #}
+                    <li><a href="#"><img src="{% static 'icons/calendar_icon.png' %}" alt="Calendário"> Calendário</a>
+                    </li>
+                    <li><a href="#"><img src="{% static 'icons/tasks_icon.png' %}" alt="Tarefas"> Tarefas</a></li>
+                    <li><a href="#"><img src="{% static 'icons/notes_icon.png' %}" alt="Anotações"> Anotações</a></li>
+                    <li><a href="#"><img src="{% static 'icons/user_icon.png' %}" alt="Perfil"> Perfil</a></li>
+                    <li><a href="{% url 'logout' %}" class="custom-btn-logout"><img
+                                src="{% static 'icons/logout_icon.png' %}" alt="Sair"> Sair</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        {# Conteúdo Principal #}
+        <main class="content-area">
+            <header class="top-header">
+                <div class="date-display">
+                    <h1>{{ current_date|date:"d \d\e F \d\e Y, H:i" }}</h1> {# Exemplo de como formatar data/hora da
+                    view #}
+                </div>
+                <div class="user-info">
+                    <img src="{% static 'images/user_avatar.png' %}" alt="Avatar" class="user-avatar"> {# Ajuste o
+                    caminho da imagem #}
+                    <span>Olá, {{ request.user.first_name|default:"Usuário" }}</span> {# Exibe o nome do usuário logado
+                    #}
+                    <div class="app-logo-header">
+                        <img src="{% static 'images/day_planner_logo.png' %}" alt="Day Planner Logo"> {# Logo na parte
+                        superior direita #}
+                    </div>
+                </div>
+            </header>
+
+            <div class="dashboard-grid">
+                {# Seção de Tarefas #}
+                <section class="card tasks-section">
+                    <h2>Tarefas</h2>
+                    <div class="task-category">
+                        <h3>Pessoais</h3>
+                        {% for task in tasks %} {# 'tasks' vem do context_object_name da sua ListView #}
+                        {% if task.type == 'personal' %} {# Assumindo que você tem um campo 'type' no modelo Task #}
+                        <p>{{ task.title }}</p>
+                        <small>{{ task.description|truncatechars:50 }}</small>
+                        {% endif %}
+                        {% empty %}
+                        <p>Nenhuma tarefa pessoal agendada.</p>
+                        {% endfor %}
+                    </div>
+                    <div class="task-category">
+                        <h3>Estudantis</h3>
+                        {% for task in tasks %}
+                        {% if task.type == 'academic' %} {# Exemplo de outro tipo de tarefa #}
+                        <p>{{ task.title }}</p>
+                        <small>{{ task.description|truncatechars:50 }}</small>
+                        {% endif %}
+                        {% empty %}
+                        <p>Nenhuma tarefa estudantil agendada.</p>
+                        {% endfor %}
+                    </div>
+                    {# Botão para adicionar mais tarefas, se desejar #}
+                    <a href="#" class="custom-btn add-task-btn">Adicionar Tarefa</a>
+                </section>
+
+                {# Seção de Calendário (mock-up simples) #}
+                <section class="card calendar-section">
+                    <h2>Calendário</h2>
+                    <div class="calendar-display">
+                        <h3>Junho 2025</h3>
+                        <table class="calendar-table">
+                            <thead>
+                                <tr>
+                                    <th>D</th>
+                                    <th>S</th>
+                                    <th>T</th>
+                                    <th>Q</th>
+                                    <th>Q</th>
+                                    <th>S</th>
+                                    <th>S</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {# Isso seria dinamicamente gerado por uma view ou JS real #}
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>3</td>
+                                    <td>4</td>
+                                    <td>5</td>
+                                    <td>6</td>
+                                    <td>7</td>
+                                    <td>8</td>
+                                </tr>
+                                <tr>
+                                    <td>9</td>
+                                    <td class="today">10</td>
+                                    <td>11</td>
+                                    <td>12</td>
+                                    <td>13</td>
+                                    <td>14</td>
+                                    <td>15</td>
+                                </tr>
+                                <tr>
+                                    <td>16</td>
+                                    <td>17</td>
+                                    <td>18</td>
+                                    <td>19</td>
+                                    <td>20</td>
+                                    <td>21</td>
+                                    <td>22</td>
+                                </tr>
+                                <tr>
+                                    <td>23</td>
+                                    <td>24</td>
+                                    <td>25</td>
+                                    <td>26</td>
+                                    <td>27</td>
+                                    <td>28</td>
+                                    <td>29</td>
+                                </tr>
+                                <tr>
+                                    <td>30</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                {# Seção de Frase do Dia #}
+                <section class="card quote-section">
+                    <h3>Frase do dia</h3>
+                    {# 'quote_of_the_day' seria uma instância do seu modelo QuoteOfTheDay passada pelo contexto #}
+                    {% if quote_of_the_day %}
+                    <p>"{{ quote_of_the_day.text }}"</p>
+                    {% if quote_of_the_day.author %}
+                    <small>- {{ quote_of_the_day.author }}</small>
+                    {% endif %}
+                    {% else %}
+                    <p>Nenhuma frase do dia disponível.</p>
+                    {% endif %}
+                </section>
+
+                {# Seção de Anotações #}
+                <section class="card notes-section">
+                    <h2>Anotações</h2>
+                    {# 'notes' viria do contexto de uma view para anotações #}
+                    {% for note in notes %}
+                    <div class="note-item">
+                        <h3>{{ note.title }}</h3>
+                        <p>{{ note.content|truncatechars:150 }}</p>
+                        <small>Criado em: {{ note.created_at|date:"d/m/Y" }}</small>
+                    </div>
+                    {% empty %}
+                    <p>Nenhuma anotação registrada.</p>
+                    {% endfor %}
+                    <a href="#" class="custom-btn add-note-btn">Adicionar Anotação</a>
+                </section>
+
+                {# Seções de Datas #}
+                <section class="card dates-section">
+                    <div class="date-column">
+                        <h3>Datas Comemorativas</h3>
+                        {# 'commemorative_dates' viria do contexto #}
+                        {% for date_item in commemorative_dates %}
+                        <p>{{ date_item.date|date:"d/m" }} - {{ date_item.title }}</p>
+                        {% empty %}
+                        <p>Nenhuma data comemorativa.</p>
+                        {% endfor %}
+                    </div>
+                    <div class="date-column">
+                        <h3>Datas Importantes</h3>
+                        {# 'important_dates' viria do contexto (do seu modelo ImportanteDate) #}
+                        {% for date_item in important_dates %}
+                        <p class="text-danger">{{ date_item.date|date:"d/m" }} - {{ date_item.title }}</p>
+                        {% empty %}
+                        <p>Nenhuma data importante.</p>
+                        {% endfor %}
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    {# Rodapé #}
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 Day Planner. Todos os direitos reservados.</p>
+            <ul class="footer-links">
+                <li><a href="#">Política de Privacidade</a></li>
+                <li><a href="#">Termos de Serviço</a></li>
+                <li><a href="#">Contato</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    {# Scripts JavaScript, se houver #}
+    {#
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> #}
+    {#
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script> #}
+    {#
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> #}
+</body>
+
+</html>

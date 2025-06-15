@@ -1,0 +1,48 @@
+footer {
+    background-color: #343a40;
+    /* Cor de fundo escura */
+    color: #ffffff;
+    /* Texto branco */
+    padding: 20px 0;
+    /* Espaçamento interno */
+    text-align: center;
+    margin-top: 80px;
+}
+
+.footer-content p {
+    margin: 0;
+    /* Remove margens do parágrafo */
+    font-size: 14px;
+    /* Tamanho do texto */
+}
+
+.footer-links {
+    list-style: none;
+    /* Remove os marcadores da lista */
+    padding: 0;
+    /* Remove o padding */
+    margin: 10px 0 0;
+    /* Espaçamento superior */
+    display: flex;
+    /* Exibe os links em linha */
+    justify-content: center;
+    /* Centraliza os links */
+    gap: 15px;
+    /* Espaçamento entre os links */
+}
+
+.footer-links li a {
+    color: #ffffff;
+    /* Cor dos links */
+    text-decoration: none;
+    /* Remove o sublinhado */
+    font-size: 14px;
+    /* Tamanho do texto */
+    transition: color 0.3s ease;
+    /* Animação ao passar o mouse */
+}
+
+.footer-links li a:hover {
+    color: #17a2b8;
+    /* Cor ao passar o mouse */
+}
