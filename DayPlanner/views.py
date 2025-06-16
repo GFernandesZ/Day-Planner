@@ -10,7 +10,7 @@ class Login(View):
     def get(self, request):
         contexto = {'mensagem': ''}
         if request.user.is_authenticated:
-            return redirect('/agenda')
+            return redirect('/Agenda')
         else:
             return render(request, 'login.html', contexto)
     

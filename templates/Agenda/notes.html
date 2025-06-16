@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<body>
+    <div class="d-flex min-vh-100">
+
+        <div class="sidebar bg-dark d-flex flex-column align-items-center py-3" id="sidebar">
+
+            <div class="logo bg-white rounded-3 d-flex align-items-center justify-content-center mb-4">
+                <div class="logo-inner bg-dark rounded"></div>
+            </div>
+
+            <nav class="d-flex flex-column gap-3">
+                <a href="{% url 'home_agenda' %}" class="btn menu-item">
+                    <i class="fas fa-home"></i>
+                </a>
+                <a href="{% url 'list_tasks' %}" class="btn menu-item">
+                    <i class="fas fa-file-text"></i>
+                </a>
+                <a href="{% url 'list_notes' %}" class="btn menu-item">
+                    <i class="fas fa-sticky-note"></i>
+                </a>
+                <button class="btn menu-item">
+                    <i class="fas fa-users"></i>
+                </button>
+            </nav>
+        </div>
+
+        <div class="flex-fill d-flex flex-column main-content" id="mainContent">
+
+            <header class="header bg-white border-bottom px-4 py-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center gap-3">
+                        <button class="btn btn-light sidebar-toggle" id="sidebarToggle">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                        <h1 class="h4 mb-0 text-dark">Minhas Anotações</h1>
+                    </div>
+                    <div class="d-flex align-items-center gap-3">
+                        <button class="btn btn-warning fw-medium px-4">
+                            Nova Anotação
+                        </button>
+                        <div class="d-flex align-items-center gap-2">
+                            <div
+                                class="user-avatar bg-gradient rounded-circle d-flex align-items-center justify-content-center">
+                                <span class="text-white fw-medium">J</span>
+                            </div>
+                            <span class="text-dark fw-medium">Olá, João</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+
+            <main class="flex-fill p-4 bg-light overflow-auto">
+                <div class="container-fluid">
+                    <div class="row g-4">
+
+                        <div class="col-lg-4 col-md-6">
+                            <div
+                                class="note-card bg-white p-3 rounded-3 border border-start border-start-4 border-danger">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h3 class="h6 fw-semibold text-dark mb-1">História</h3>
+                                        <h4 class="small text-primary fw-medium">Revolução Francesa</h4>
+                                    </div>
+                                    <span class="small text-muted">15/06/2024</span>
+                                </div>
+                                <ul class="list-unstyled mb-3">
+                                    <li class="small text-muted mb-1">• Teve início com a convocação dos Estados Gerais
+                                    </li>
+                                    <li class="small text-muted mb-1">• Três fases principais: Monarquia Constitucional,
+                                        República Jacobina</li>
+                                    <li class="small text-muted mb-1">• Convenção Nacional teve radicalismo</li>
+                                    <li class="small text-muted">• Influenciou movimentos democráticos mundiais</li>
+                                </ul>
+                                <div class="d-flex justify-content-between border-top pt-2">
+                                    <button class="btn btn-link p-0 small text-primary">Editar</button>
+                                    <button class="btn btn-link p-0 small text-muted">Compartilhar</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <div
+                                class="note-card bg-white p-3 rounded-3 border border-start border-start-4 border-primary">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h3 class="h6 fw-semibold text-dark mb-1">Matemática</h3>
+                                        <h4 class="small text-primary fw-medium">Equações do 2º grau</h4>
+                                    </div>
+                                    <span class="small text-muted">14/06/2024</span>
+                                </div>
+                                <ul class="list-unstyled mb-3">
+                                    <li class="small text-muted mb-1">• Fórmula de Bhaskara: x = (-b ± √(b²-4ac))/2a
+                                    </li>
+                                    <li class="small text-muted mb-1">• Δ > 0: duas raízes reais e distintas</li>
+                                    <li class="small text-muted mb-1">• Δ = 0: uma raiz real (raiz dupla)</li>
+                                    <li class="small text-muted">• Δ < 0: não possui raízes reais</li>
+                                </ul>
+                                <div class="d-flex justify-content-between border-top pt-2">
+                                    <button class="btn btn-link p-0 small text-primary">Editar</button>
+                                    <button class="btn btn-link p-0 small text-muted">Compartilhar</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <div
+                                class="note-card bg-white p-3 rounded-3 border border-start border-start-4 border-success">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h3 class="h6 fw-semibold text-dark mb-1">Biologia</h3>
+                                        <h4 class="small text-primary fw-medium">Respiração Celular</h4>
+                                    </div>
+                                    <span class="small text-muted">13/06/2024</span>
+                                </div>
+                                <ul class="list-unstyled mb-3">
+                                    <li class="small text-muted mb-1">• glicose + oxigênio → dióxido de carbono + água +
+                                        ATP</li>
+                                    <li class="small text-muted mb-1">• Três etapas principais: glicólise, ciclo de
+                                        Krebs, cadeia respiratória</li>
+                                    <li class="small text-muted mb-1">• Ocorre principalmente nas mitocôndrias</li>
+                                    <li class="small text-muted">• Processo fundamental para obtenção de energia celular
+                                    </li>
+                                </ul>
+                                <div class="d-flex justify-content-between border-top pt-2">
+                                    <button class="btn btn-link p-0 small text-primary">Editar</button>
+                                    <button class="btn btn-link p-0 small text-muted">Compartilhar</button>
+                                </div>
+                            </div>
+                        </div>
+
+     
+                        <div class="col-lg-4 col-md-6">
+                            <div
+                                class="note-card bg-white p-3 rounded-3 border border-start border-start-4 border-info">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h3 class="h6 fw-semibold text-dark mb-1">Física</h3>
+                                        <h4 class="small text-primary fw-medium">Leis de Newton</h4>
+                                    </div>
+                                    <span class="small text-muted">12/06/2024</span>
+                                </div>
+                                <ul class="list-unstyled mb-3">
+                                    <li class="small text-muted mb-1">• 1ª Lei: Lei da Inércia - corpo permanece em
+                                        repouso ou movimento uniforme</li>
+                                    <li class="small text-muted mb-1">• 2ª Lei: F = m.a - Força é igual a massa ×
+                                        aceleração</li>
+                                    <li class="small text-muted">• 3ª Lei: Ação e Reação - toda ação possui uma reação
+                                        igual e contrária</li>
+                                </ul>
+                                <div class="d-flex justify-content-between border-top pt-2">
+                                    <button class="btn btn-link p-0 small text-primary">Editar</button>
+                                    <button class="btn btn-link p-0 small text-muted">Compartilhar</button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-4 col-md-6">
+                            <div
+                                class="note-card bg-white p-3 rounded-3 border border-start border-start-4 border-warning">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h3 class="h6 fw-semibold text-dark mb-1">Química</h3>
+                                        <h4 class="small text-primary fw-medium">Ligações Químicas</h4>
+                                    </div>
+                                    <span class="small text-muted">11/06/2024</span>
+                                </div>
+                                <ul class="list-unstyled mb-3">
+                                    <li class="small text-muted mb-1">• Ligação iônica: transferência de elétrons</li>
+                                    <li class="small text-muted mb-1">• Ligação covalente: compartilhamento de elétrons
+                                    </li>
+                                    <li class="small text-muted mb-1">• Ligação metálica: mar de elétrons</li>
+                                    <li class="small text-muted">• Determinam as propriedades dos compostos</li>
+                                </ul>
+                                <div class="d-flex justify-content-between border-top pt-2">
+                                    <button class="btn btn-link p-0 small text-primary">Editar</button>
+                                    <button class="btn btn-link p-0 small text-muted">Compartilhar</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-6">
+                            <div
+                                class="note-card bg-white p-3 rounded-3 border border-start border-start-4 border-secondary">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h3 class="h6 fw-semibold text-dark mb-1">Literatura</h3>
+                                        <h4 class="small text-primary fw-medium">Romantismo no Brasil</h4>
+                                    </div>
+                                    <span class="small text-muted">10/06/2024</span>
+                                </div>
+                                <ul class="list-unstyled mb-3">
+                                    <li class="small text-muted mb-1">• Principais características: sentimentalismo,
+                                        nacionalismo</li>
+                                    <li class="small text-muted mb-1">• Autores importantes: José de Alencar, Gonçalves
+                                        Dias</li>
+                                    <li class="small text-muted mb-1">• Três fases: indianista, mal do século,
+                                        condoreira</li>
+                                    <li class="small text-muted">• Influência europeia adaptada ao contexto brasileiro
+                                    </li>
+                                </ul>
+                                <div class="d-flex justify-content-between border-top pt-2">
+                                    <button class="btn btn-link p-0 small text-primary">Editar</button>
+                                    <button class="btn btn-link p-0 small text-muted">Compartilhar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    </html>
+    {% endblock %}
