@@ -26,13 +26,13 @@ class ListNotes(ListView, LoginRequiredMixin):
 class CreateTask(CreateView, LoginRequiredMixin):
     model = Task
     form_class = FormularioTask
-    template_name = 'Agenda/newTaskhtml'
+    template_name = 'Agenda/createTasks.html'
     success_url = reverse_lazy('list_tasks')
 
 class CreateNote(CreateView, LoginRequiredMixin):
     model = Note
     form_class = FormularioNote
-    template_name = 'Agenda/newNote.html'
+    template_name = 'Agenda/createNotes.html'
     success_url = reverse_lazy('list_notes')
 
 class UpdateTask(UpdateView, LoginRequiredMixin):

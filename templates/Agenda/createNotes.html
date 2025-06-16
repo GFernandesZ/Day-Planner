@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="d-flex min-vh-100">
+    <!-- Sidebar -->
+    <div class="sidebar bg-dark d-flex flex-column align-items-center py-3" id="sidebar">
+        <!-- Logo -->
+        <div class="logo bg-white rounded-3 d-flex align-items-center justify-content-center mb-4">
+            <div class="logo-inner bg-dark rounded"></div>
+        </div>
+
+        <nav class="d-flex flex-column gap-3">
+            <a href="{% url 'home_agenda' %}" class="btn menu-item">
+                <i class="fas fa-home"></i>
+            </a>
+            <a href="{% url 'list_tasks' %}" class="btn menu-item">
+                <i class="fas fa-file-text"></i>
+            </a>
+            <a href="{% url 'list_notes' %}" class="btn menu-item">
+                <i class="fas fa-sticky-note"></i>
+            </a>
+            <button class="btn menu-item">
+                <i class="fas fa-users"></i>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-fill d-flex flex-column main-content" id="mainContent">
+        <!-- Header -->
+        <header class="header bg-white border-bottom px-4 py-3">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-light sidebar-toggle" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="h4 mb-0 text-dark">Nova Anotação</h1>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <div
+                            class="user-avatar bg-gradient rounded-circle d-flex align-items-center justify-content-center">
+                            <span class="text-white fw-medium">J</span>
+                        </div>
+                        <span class="text-dark fw-medium">Olá, João</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-fill p-4 bg-light overflow-auto">
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10 col-xl-8">
+                        <div class="bg-white p-4 rounded-4 shadow-sm">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h2 class="h4 fw-semibold mb-0">Criar Nova Anotação</h2>
+                                <a href="notes.html" class="btn btn-link text-decoration-none">
+                                    <i class="fas fa-arrow-left me-2"></i>Voltar
+                                </a>
+                            </div>
+
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-8">
+                                        <div class="mb-3">
+                                            <label for="noteSubject" class="form-label fw-medium">Matéria</label>
+                                            <input type="text" class="form-control" id="noteSubject"
+                                                placeholder="Ex: História, Matemática, Biologia...">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="noteColor" class="form-label fw-medium">Cor da Borda</label>
+                                            <select class="form-select" id="noteColor">
+                                                <option value="border-danger">Vermelho</option>
+                                                <option value="border-primary" selected>Azul</option>
+                                                <option value="border-success">Verde</option>
+                                                <option value="border-info">Azul Claro</option>
+                                                <option value="border-warning">Amarelo</option>
+                                                <option value="border-secondary">Cinza</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="noteTopic" class="form-label fw-medium">Tópico</label>
+                                    <input type="text" class="form-control" id="noteTopic"
+                                        placeholder="Ex: Revolução Francesa, Equações do 2º grau...">
+                                </div>
+
+                                <div class="mb-4">
+                                    <label for="noteContent" class="form-label fw-medium">Conteúdo</label>
+                                    <textarea class="form-control" id="noteContent" rows="12"
+                                        placeholder="Digite suas anotações aqui...&#10;&#10;Dica: Use • para criar listas com bullet points&#10;• Primeiro ponto&#10;• Segundo ponto&#10;• Terceiro ponto"></textarea>
+                                </div>
+
+                                <div class="mb-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="saveDate">
+                                        <label class="form-check-label" for="saveDate">
+                                            Salvar com data atual
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex gap-3">
+                                    <button type="submit" class="btn btn-warning fw-medium px-4 py-2">
+                                        <i class="fas fa-save me-2"></i>Salvar Anotação
+                                    </button>
+                                    <button type="button" class="btn btn-outline-primary px-4 py-2">
+                                        <i class="fas fa-eye me-2"></i>Pré-visualizar
+                                    </button>
+                                    <a href="notes.html" class="btn btn-outline-secondary px-4 py-2">
+                                        Cancelar
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+{% endblock %}

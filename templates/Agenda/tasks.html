@@ -46,7 +46,6 @@
                     </div>
                 </div>
             </header>
-
             <main class="flex-fill p-4 bg-light overflow-auto">
                 <div class="container-fluid">
                     <div class="row g-4">
@@ -77,9 +76,10 @@
                                         <span class="small">Ler um livro</span>
                                     </div>
                                 </div>
-                                <button class="btn btn-link p-0 mt-3 text-decoration-none opacity-75 hover-opacity-100">
+                                <a href=" {% url 'create_task' %}"
+                                    class="btn btn-link p-0 mt-3 text-decoration-none opacity-75 hover-opacity-100">
                                     <small>+ Adicionar nova tarefa</small>
-                                </button>
+                                </a>
                             </div>
                         </div>
 
@@ -106,9 +106,10 @@
                                         <span class="small">Estudar para prova de História</span>
                                     </div>
                                 </div>
-                                <button class="btn btn-link p-0 mt-3 text-decoration-none opacity-75 hover-opacity-100">
+                                <a href=" {% url 'create_task' %}"
+                                    class="btn btn-link p-0 mt-3 text-decoration-none opacity-75 hover-opacity-100">
                                     <small>+ Adicionar nova tarefa</small>
-                                </button>
+                                </a>
                             </div>
                         </div>
 
@@ -132,23 +133,24 @@
                                             e-mails</span>
                                     </div>
                                 </div>
-                                <button
+                                <a href=" {% url 'create_task' %}"
                                     class="btn btn-link p-0 mt-3 text-decoration-none opacity-75 hover-opacity-100 text-purple">
                                     <small>+ Adicionar nova tarefa</small>
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
 
                     <!-- Botão Nova Categoria -->
                     <div class="mt-4">
-                        <button class="btn btn-warning fw-medium px-4 py-2">
+                        <a href=" {% url 'create_task' %}" class="btn btn-warning fw-medium px-4 py-2">
                             Nova Categoria
-                        </button>
+                        </a>
                     </div>
                 </div>
             </main>
         </div>
     </div>
+
 </html>
 {% endblock %}
