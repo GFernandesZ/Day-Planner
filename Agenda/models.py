@@ -13,8 +13,18 @@ class Task(models.Model):
 
 class Note(models.Model):
     title = models.CharField(max_length=100, verbose_name='Título')
+    topic = models.CharField(max_length=100, verbose_name='Tópico', blank=True, null=True)
     content = models.TextField(verbose_name='Conteúdo')
+    border_color = models.CharField(
+        max_length=20,
+        choices=NOTE_BORDER_COLOR_CHOICES,
+        default='border-primary',
+        verbose_name='Cor da Borda'
+    )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
+
+    def __str__(self):
+        return self.title
 
 class ImportanteDate(models.Model):
     title = models.CharField(max_length=100, verbose_name='Título')

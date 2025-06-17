@@ -240,3 +240,18 @@
 ::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
 }
+
+.note-content-preview {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    min-height: 4.5em;
+
+}
+
+.note-content-preview+.mb-3 {
+    margin-top: 0.5rem !important;
+}
