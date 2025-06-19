@@ -1,15 +1,15 @@
 from django.db import models
-from datetime import datetime
-from Agenda.consts import *
 from django.utils import timezone
+from Agenda.consts import NOTE_BORDER_COLOR_CHOICES # Mantenha se NOTE_BORDER_COLOR_CHOICES estiver em consts.py
 
 class Task(models.Model):
-    title = models.CharField(max_length=100, verbose_name='Título')
-    description = models.TextField(verbose_name='Descrição')
-    type = models.CharField(max_length=20, choices=TASK_TYPE_CHOICES, default='personal', verbose_name='Tipo')
-    start_date = models.DateTimeField(default=timezone.now, verbose_name='Data de Início')
-    end_date = models.DateTimeField(blank=True, null=True, verbose_name='Data de Término')
-    concluded = models.BooleanField(default=False, verbose_name='Concluído')
+    title = models.CharField(max_length=200, verbose_name='Tarefa')
+    type = models.CharField(max_length=50, verbose_name='Tipo de Tarefa', default='Pessoais')
+    order = models.IntegerField(default=0, verbose_name='Ordem') # O CAMPO PROBLEMÁTICO
+    concluded = models.BooleanField(default=False, verbose_name='Concluída')
+
+    def __str__(self):
+        return self.title
 
 class Note(models.Model):
     title = models.CharField(max_length=100, verbose_name='Título')
@@ -17,7 +17,7 @@ class Note(models.Model):
     content = models.TextField(verbose_name='Conteúdo')
     border_color = models.CharField(
         max_length=20,
-        choices=NOTE_BORDER_COLOR_CHOICES,
+        choices=NOTE_BORDER_COLOR_CHOICES, # Assumindo que está em consts.py
         default='border-primary',
         verbose_name='Cor da Borda'
     )
@@ -40,10 +40,9 @@ class ImportanteDate(models.Model):
 class QuoteOfTheDay(models.Model):
     text = models.TextField(verbose_name='Texto da Frase')
     author = models.CharField(max_length=100, blank=True, null=True, verbose_name='Autor')
-    date = models.DateField(blank=True, null=True, verbose_name='Data (opcional)') # Se a frase for para uma data específica
-    is_active = models.BooleanField(default=True, verbose_name='Ativa') # Para controlar qual frase exibir
+    date = models.DateField(blank=True, null=True, verbose_name='Data (opcional)')
+    is_active = models.BooleanField(default=True, verbose_name='Ativa')
 
     class Meta:
         verbose_name = 'Frase do Dia'
         verbose_name_plural = 'Frases do Dia'
-        

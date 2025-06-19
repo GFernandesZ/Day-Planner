@@ -18,4 +18,10 @@ class FormularioNote(ModelForm):
 class FormularioTask(ModelForm):
     class Meta:
         model = Task
-        exclude = []
+        fields = ['type', 'title', 'order', 'concluded']
+        widgets = {
+            'type': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Pessoais, Estudantis...'}),
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Digite a tarefa (ex: Fazer compras)'}),
+            'order': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ordem (1, 2, 3...)', 'min': 0}), # Input numérico
+            'concluded': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }

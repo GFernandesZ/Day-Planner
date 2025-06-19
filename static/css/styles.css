@@ -243,7 +243,7 @@
 
 .note-content-preview {
     display: -webkit-box;
-    -webkit-line-clamp: 4;
+    line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -254,4 +254,131 @@
 
 .note-content-preview+.mb-3 {
     margin-top: 0.5rem !important;
+}
+
+.task-category-card.bg-gradient-cyan {
+    /* Pessoais */
+    background: linear-gradient(135deg, #A7F3D0, #6EE7B7);
+    color: #065F46;
+    /* Cor do texto dentro deste card */
+}
+
+.task-category-card.bg-gradient-blue {
+    /* Estudantis */
+    background: linear-gradient(135deg, #BFDBFE, #93C5FD);
+    color: #1E40AF;
+    /* Cor do texto dentro deste card */
+}
+
+.task-category-card.bg-light-purple {
+    /* Profissionais */
+    background-color: #F3E8FF;
+    color: #7C3AED;
+    /* Cor do texto dentro deste card */
+}
+
+/* Seu styles.css existente */
+
+/* Cores de fundo para os cards de categoria (Pessoais, Estudantis, Profissionais) */
+/* As cores bg-gradient-cyan, bg-gradient-blue, bg-light-purple já devem estar definidas no seu CSS,
+   apenas certifique-se que elas dão o visual da imagem */
+.task-category-card.bg-gradient-cyan {
+    /* Confirme que estas cores correspondem à imagem */
+    background: linear-gradient(135deg, #A7F3D0, #6EE7B7);
+    /* Verde esmaecido da imagem */
+    color: #065F46;
+}
+
+.task-category-card.bg-gradient-blue {
+    /* Confirme que estas cores correspondem à imagem */
+    background: linear-gradient(135deg, #BFDBFE, #93C5FD);
+    /* Azul esmaecido da imagem */
+    color: #1E40AF;
+}
+
+.task-category-card.bg-light-purple {
+    /* Para Profissionais */
+    background-color: #F3E8FF;
+    /* Cor similar ao roxo claro */
+    color: #7C3AED;
+}
+
+
+/* Estilos para o CONTÊINER de cada ITEM de TAREFA individual */
+.task-item-container {
+    background-color: rgba(255, 255, 255, 0.85);
+    /* Fundo branco semi-transparente para o item de tarefa */
+    border-radius: 8px;
+    /* Arredondar bordas do item */
+    padding: 10px;
+    /* Padding interno */
+    transition: all 0.2s ease;
+    width: 100%;
+    /* Ocupa a largura total da coluna */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    /* Sombra suave para separar os itens */
+}
+
+.task-item-container:hover {
+    background-color: rgba(255, 255, 255, 1);
+    /* Fundo sólido ao passar o mouse */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Cores para os itens individuais da tarefa baseadas na prioridade (Border Left) */
+.task-item-container.task-color-low {
+    border-left: 5px solid #28a745;
+    /* Verde Bootstrap 'success' */
+}
+
+.task-item-container.task-color-medium {
+    border-left: 5px solid #ffc107;
+    /* Amarelo/Laranja Bootstrap 'warning' */
+}
+
+.task-item-container.task-color-high {
+    border-left: 5px solid #fd7e14;
+    /* Laranja Escuro Bootstrap 'orange' */
+}
+
+.task-item-container.task-color-urgent {
+    border-left: 5px solid #dc3545;
+    /* Vermelho Bootstrap 'danger' */
+}
+
+/* Tamanhos para os itens individuais da tarefa baseadas na prioridade */
+/* Isso pode ser feito ajustando padding ou font-size para dar a sensação de "tamanho da box" */
+/* Ou controlando a altura mínima, mas com cuidado para não cortar conteúdo */
+
+.task-item-container.task-size-low {
+    /* Menor tamanho */
+    min-height: 50px;
+    /* Exemplo de altura mínima */
+    /* font-size: 0.9em; */
+}
+
+.task-item-container.task-size-medium {
+    /* Tamanho médio */
+    min-height: 60px;
+    /* font-size: 1em; */
+}
+
+.task-item-container.task-size-high {
+    /* Maior tamanho */
+    min-height: 70px;
+    /* font-size: 1.1em; */
+}
+
+.task-item-container.task-size-urgent {
+    /* Tamanho Urgente - pode ser ainda maior ou com borda mais grossa */
+    min-height: 80px;
+    /* font-size: 1.2em; */
+    border-width: 8px;
+    /* Borda mais grossa para urgente */
+}
+
+/* Ajustes para o texto de tarefas concluídas */
+.task-item-container label.text-decoration-line-through {
+    color: #6c757d;
+    /* Cor mais esmaecida para texto riscado */
 }

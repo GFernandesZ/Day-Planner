@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="d-flex min-vh-100 justify-content-center align-items-center">
+    <div class="card p-4 shadow-sm" style="max-width: 500px;">
+        <h2 class="card-title text-center text-danger mb-4">Confirmar Exclusão</h2>
+        <div class="card-body">
+            <p class="text-center mb-4">Tem certeza de que deseja excluir a anotação:</p>
+            <h4 class="text-center fw-bold mb-4">{{ object.title }} ({{ object.topic }})?</h4>
+            <p class="text-center text-muted">Esta ação não pode ser desfeita.</p>
+
+            <form method="post" action="{% url 'delete_note' pk=object.pk %}"
+                class="d-flex justify-content-center gap-3 mt-4">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger px-4">
+                    <i class="fas fa-trash me-2"></i>Excluir
+                </button>
+                <a href="{% url 'list_notes' %}" class="btn btn-secondary px-4">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

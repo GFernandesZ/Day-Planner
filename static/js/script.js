@@ -105,6 +105,27 @@ function setupTaskScrolling() {
         });
     }
 }
+function deleteNote() {
+    const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    deleteModal.show();
+}
+
+function confirmDelete() {
+    // Aqui você implementaria a lógica de exclusão
+    alert('Anotação excluída com sucesso!');
+    window.location.href = 'notes.html';
+}
+
+function deleteTask() {
+    const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    deleteModal.show();
+}
+
+function confirmDelete() {
+    // Aqui você implementaria a lógica de exclusão
+    alert('Tarefa excluída com sucesso!');
+    window.location.href = 'tasks.html';
+}
 
 // Initialize task scrolling if needed
 setupTaskScrolling();
