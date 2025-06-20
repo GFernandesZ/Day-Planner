@@ -1,6 +1,6 @@
 import os
 from django.http import FileResponse, Http404
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
@@ -17,21 +17,10 @@ class HomeView(ListView):
     template_name = 'Agenda/home.html'
 
     def get_queryset(self):
-        # Vai pegar as 5 tarefas mais prioritárias/recentes
-        # Se 'order' não está mais em Task, remova-o daqui.
-        # As últimas instruções removeram 'order' do modelo Task.
-        # então deve ser: return Task.objects.all().order_by('priority', 'name')[:5] 
         return Task.objects.all().order_by('priority', 'name')[:5] 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # O problema 'getattribute' não deve mais ocorrer na home.html
-        # Se usar `task_obj|getattribute:"item"|add:i|add:"_text"` diretamente
-        # será `AttributeError` no template.
-        # Solução para isso: ou usar um filtro customizado `attribute`,
-        # ou passar os dados já processados da view.
-
-        # PARA EVITAR GETATTRIBUTE NO TEMPLATE, PRE-PROCESSAR AQUI:
         processed_home_tasks = []
         for task_obj in self.get_queryset():
             items_for_display = []
@@ -78,29 +67,27 @@ class ListTasks(ListView, LoginRequiredMixin):
         context['processed_task_categories'] = processed_categories # Nova variável de contexto
 
         return context
+
     
 class ListNotes(LoginRequiredMixin, ListView):
     model = Note
     context_object_name = 'notes'
     template_name = 'Agenda/Notes/notes.html'
 
-class FotoAnotacoes(LoginRequiredMixin, View):
-    def get(self, request, arquivo): 
-        try:
-            note = note.objects.filter(foto='Agenda/fotos/{}'.format(arquivo)).first()
-
-            print(note)
-            
-            return FileResponse(note.foto)
-        except ObjectDoesNotExist:
-            raise Http404('Fotos não encontradas ou acesso não autorizado')
-        except Exception as exception:
-            raise exception
-
 class ViewNote(DetailView, LoginRequiredMixin): # NOVA VIEW
     model = Note
     context_object_name = 'note' # O objeto Note será acessível como 'note' no template
     template_name = 'Agenda/Notes/detailNote.html'
+
+def upload_imagem(request):
+    if request.method == 'POST':
+        form = FormularioNote(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('upload_imagem')
+    else:
+        form = FormularioNote()
+    return render(request, 'createNote.html', {'form': form})
 
 class CreateTask(CreateView, LoginRequiredMixin):
     model = Task

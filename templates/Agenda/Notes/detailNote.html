@@ -90,8 +90,7 @@
                             <div class="mb-3">
                                 <label class="form-label fw-medium">Foto:</label>
                                 <div class="text-center">
-                                    {{note.foto.url}}
-                                    <img src="{% url 'foto_anotacao' arquivo=note.foto.name|slice:'13:' %}" class="img-fluid rounded">
+                                    <img src="{{ note.foto.url }}" class="img-fluid rounded">
                                 </div>
                             </div>
                             {% endif %}

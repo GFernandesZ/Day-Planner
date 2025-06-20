@@ -36,7 +36,7 @@ class Note(models.Model):
         default='border-primary',
         verbose_name='Cor da Borda'
     )
-    foto = models.ImageField(upload_to='Agenda/fotos', blank=True, null=True)
+    foto = models.ImageField(upload_to='Agenda/fotos/', blank=True, null=True)
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
 

@@ -1,6 +1,8 @@
 from django.contrib import admin
-from django.urls import path, include # Certifique-se de importar 'include'
-from DayPlanner.views import Login, Logout # Importa as views de autenticação do projeto
+from django.urls import path, include
+from DayPlanner.views import Login, Logout
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -8,4 +10,4 @@ urlpatterns = [
     path('logout/', Logout.as_view(), name='logout'),
     path('Agenda/', include('Agenda.urls'), name='agenda'),
     # path('autenticacao-api/', LoginApi.as_view()),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
