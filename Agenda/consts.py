@@ -7,12 +7,16 @@ NOTE_BORDER_COLOR_CHOICES = (
     ('border-secondary', 'Cinza'),
 )
 
+TASK_BOX_PRIORITY_CHOICES = [
+    ('low', 'Baixa'),
+    ('medium', 'Média'),
+    ('high', 'Alta'),
+    ('urgent', 'Urgente'),
+]
 
-
-
-TASK_PRIORITY_SIZE_MAP = {
-    'low': 'task-size-low',
-    'medium': 'task-size-medium',
-    'high': 'task-size-high',
-    'urgent': 'task-size-urgent',
+TASK_BOX_COLOR_MAP = {
+    'low': 'task-box-color-low',
+    'medium': 'task-box-color-medium',
+    'high': 'task-box-color-high',
+    'urgent': 'task-box-color-urgent',
 }

@@ -1,0 +1,150 @@
+{# Agenda/templates/Agenda/notes_detail.html #}
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="d-flex min-vh-100">
+    <div class="sidebar bg-dark d-flex flex-column align-items-center py-3" id="sidebar">
+        <div class="logo bg-white rounded-3 d-flex align-items-center justify-content-center mb-4">
+            <div class="logo-inner bg-dark rounded"></div>
+        </div>
+
+        <nav class="d-flex flex-column gap-3">
+            <a href="{% url 'home_agenda' %}" class="btn menu-item">
+                <i class="fas fa-home"></i>
+            </a>
+            <a href="{% url 'list_tasks' %}" class="btn menu-item">
+                <i class="fas fa-file-text"></i>
+            </a>
+            <a href="{% url 'list_notes' %}" class="btn menu-item active"> {# Marcar como ativo #}
+                <i class="fas fa-sticky-note"></i>
+            </a>
+            <button class="btn menu-item">
+                <i class="fas fa-users"></i>
+            </button>
+        </nav>
+    </div>
+
+    <div class="flex-fill d-flex flex-column main-content" id="mainContent">
+        <header class="header bg-white border-bottom px-4 py-3">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-light sidebar-toggle" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1 class="h4 mb-0 text-dark">Visualizar Anotação</h1>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <div
+                            class="user-avatar bg-gradient rounded-circle d-flex align-items-center justify-content-center">
+                            <span class="text-white fw-medium">J</span>
+                        </div>
+                        <span class="text-dark fw-medium">Olá, João</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-fill p-4 bg-light overflow-auto">
+            <div class="container-fluid">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10 col-xl-8">
+                        <div class="bg-white p-4 rounded-4 shadow-sm">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h2 class="h4 fw-semibold mb-0">Detalhes da Anotação</h2>
+                                <div class="d-flex gap-2">
+                                    {# Botão de Excluir - Abre o Modal #}
+                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#deleteNoteConfirmModal">
+                                        <i class="fas fa-trash me-2"></i>Excluir
+                                    </button>
+                                    {# Link para Editar a Anotação #}
+                                    <a href="{% url 'update_note' pk=note.pk %}" class="btn btn-warning btn-sm">
+                                        <i class="fas fa-edit me-2"></i>Editar
+                                    </a>
+                                    {# Link de Voltar #}
+                                    <a href="{% url 'list_notes' %}" class="btn btn-link text-decoration-none">
+                                        <i class="fas fa-arrow-left me-2"></i>Voltar
+                                    </a>
+                                </div>
+                            </div>
+
+                            {# DETALHES DA ANOTAÇÃO (apenas exibição) #}
+                            <div class="mb-3">
+                                <label class="form-label fw-medium">Título:</label>
+                                <p class="form-control-plaintext">{{ note.title }}</p>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-medium">Tópico:</label>
+                                <p class="form-control-plaintext">{{ note.topic|default:"Não informado" }}</p>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-medium">Conteúdo:</label>
+                                <p class="form-control-plaintext multiline-content">{{ note.content|linebreaksbr }}</p>
+                            </div>
+
+                            {% if note.foto %}
+                            <div class="mb-3">
+                                <label class="form-label fw-medium">Foto:</label>
+                                <div class="text-center">
+                                    {{note.foto.url}}
+                                    <img src="{% url 'foto_anotacao' arquivo=note.foto.name|slice:'13:' %}" class="img-fluid rounded">
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <div class="mb-3">
+                                <label class="form-label fw-medium">Cor da Borda:</label>
+                                <p class="form-control-plaintext">{{ note.get_border_color_display }}</p>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-medium">Criado em:</label>
+                                <p class="form-control-plaintext">{{ note.created_at|date:"d/m/Y H:i" }}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+{# Modal de Confirmação de Exclusão (compartilhado com editNote.html e notes.html) #}
+{# Pode estar aqui, ou em um partial para inclusão em várias páginas. #}
+<div class="modal fade" id="deleteNoteConfirmModal" tabindex="-1" aria-labelledby="deleteNoteConfirmModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteNoteConfirmModalLabel">Confirmar Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Tem certeza de que deseja excluir a anotação **"{{ note.title }}"**? Esta ação não pode ser desfeita.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form action="{% url 'delete_note' pk=note.pk %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteNoteModalElement = document.getElementById('deleteNoteConfirmModal');
+        if (deleteNoteModalElement) {
+            new bootstrap.Modal(deleteNoteModalElement);
+        }
+    });
+</script>
+
+{% endblock %}

@@ -48,69 +48,76 @@
         <main class="flex-fill p-4 bg-light overflow-auto">
             <div class="container-fluid">
                 <div class="row g-4">
-                    {% for category_data in task_categories %}
-                    <div class="col-lg-4">
-                        {# Atribui classe de cor da categoria (Pessoais, Estudantis, etc.) #}
+                    {% if processed_task_categories %}
+                    {% for category_data in processed_task_categories %}
+                    <div class="col-lg-3">
                         <div class="task-category-card p-4 rounded-4 shadow-sm 
-                            {% if category_data.type_name == 'Pessoais' %}task-category-personal-color
-                            {% elif category_data.type_name == 'Estudantis' %}task-category-academic-color
-                            {% elif category_data.type_name == 'Profissionais' %}task-category-professional-color
-                            {% else %}task-category-default-color{% endif %}"> {# Cor padrão para tipos novos #}
+                                {{ category_data.task_obj.get_box_color_class }}">
 
-                            <h2 class="h4 fw-semibold mb-3">{{ category_data.type_name }}</h2>
+                            <h2 class="h4 fw-semibold mb-3">{{ category_data.task_obj.name }}</h2>
                             <div class="d-flex flex-column gap-3">
-                                {% for task in category_data.tasks %}
-                                <div
-                                    class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2 task-item-container">
-
-                                    <div class="d-flex align-items-center gap-2 flex-grow-1">
-                                    
-
-                                        <label for="task-{{ task.pk }}-concluded"
-                                            class="small {% if task.concluded %}text-decoration-line-through opacity-75{% endif %}">
-                                            {{ task.title }}
-                                        </label>
-                                    </div>
-                                    <div class="d-flex gap-2 align-items-center">
-                                        {# Exibir a Ordem (prioridade individual) se quiser #}
-                                        {% if task.order %}
-                                        <span class="badge text-bg-info">{{ task.order }}</span>
-                                        {% endif %}
-                                        {# Link para Editar #}
-                                        <a href="{% url 'update_task' pk=task.pk %}" class="text-primary small">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        {# Link para Deletar #}
-                                        <a href="{% url 'delete_task' pk=task.pk %}" class="text-danger small">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </a>
-                                    </div>
+                                {% if category_data.items_for_display %}
+                                {% for item_text in category_data.items_for_display %}
+                                <div class="d-flex align-items-center gap-2 flex-grow-1 task-item-display">
+                                    <input type="checkbox" class="form-check-input task-item-checkbox-local" id="task-{{ category_data.task_obj.pk }}-item-{{ forloop.counter }}">
+                                    <label for="task-{{ category_data.task_obj.pk }}-item-{{ forloop.counter }}"
+                                        class="small">
+                                        • {{ item_text }}
+                                    </label>
                                 </div>
                                 {% endfor %}
+                                {% else %}
+                                <p class="small text-muted">Nenhum item nesta categoria.</p>
+                                {% endif %}
                             </div>
-                            <a href="{% url 'create_task' %}"
-                                class="btn btn-link p-0 mt-3 text-decoration-none opacity-75 hover-opacity-100">
-                                <small>+ Adicionar nova tarefa</small>
-                            </a>
-                        </div>
-                    </div>
-                    {% empty %}
-                    <div class="col-12">
-                        <div class="alert alert-info text-center" role="alert">
-                            Nenhuma tarefa encontrada. Crie a primeira tarefa!
+                            <div class="d-flex justify-content-between mt-3 pt-3 border-top">
+                                <a href="{% url 'update_task' pk=category_data.task_obj.pk %}"
+                                    class="text-primary small">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                <a href="{% url 'delete_task' pk=category_data.task_obj.pk %}"
+                                    class="text-danger small">
+                                    <i class="fas fa-trash-alt"></i> Deletar
+                                </a>
+                            </div>
                         </div>
                     </div>
                     {% endfor %}
+                    {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-info text-center" role="alert">
+                            Nenhuma categoria de tarefa encontrada. <a href="{% url 'create_task' %}"
+                                class="alert-link">Crie a primeira categoria!</a>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
 
                 <div class="mt-4">
                     <a href="{% url 'create_task' %}" class="btn btn-warning fw-medium px-4 py-2">
-                        Criar Nova Tarefa
+                        Criar Nova Categoria de Tarefa
                     </a>
                 </div>
             </div>
         </main>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkboxes = document.querySelectorAll('.task-item-checkbox-local');
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function () {
+                const label = this.nextElementSibling;
+                if (this.checked) {
+                    label.classList.add('text-decoration-line-through', 'opacity-75');
+                } else {
+                    label.classList.remove('text-decoration-line-through', 'opacity-75');
+                }
+            });
+        });
+    });
+</script>
 
 {% endblock %}

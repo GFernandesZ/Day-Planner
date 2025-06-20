@@ -73,8 +73,9 @@
                                 </li>
                             </ul>
                             <div class="d-flex justify-content-between border-top pt-2">
+                                <a href="{% url 'view_note' pk=note.pk %}" class="btn btn-link p-0 small text-primary">Ver</a>
                                 <a href="{% url 'update_note' pk=note.pk %}"
-                                    class="btn btn-link p-0 small text-primary">Ver</a>
+                                    class="btn btn-link p-0 small text-warning">Editar</a>
 
                                 <a href="{% url 'delete_note' pk=note.pk %}" class="btn btn-link p-0 small text-danger">Deletar</a>
                             </div>
