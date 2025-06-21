@@ -1,9 +1,11 @@
+from datetime import date
 import os
 from django.http import FileResponse, Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from Agenda.consts import DAILY_QUOTES
 from Agenda.models import Task, Note, ImportanteDate, QuoteOfTheDay
 from django.contrib.auth.mixins import LoginRequiredMixin
 from Agenda.forms import FormularioTask, FormularioNote
@@ -15,29 +17,37 @@ class HomeView(ListView):
     model = Task
     context_object_name = 'home_tasks' 
     template_name = 'Agenda/home.html'
-
     def get_queryset(self):
+            # Ex: 5 tarefas não concluídas mais recentes ou as de maior ordem.
+            # Mantemos esta query para as "home_tasks"
         return Task.objects.all().order_by('priority', 'name')[:5] 
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        processed_home_tasks = []
-        for task_obj in self.get_queryset():
-            items_for_display = []
-            for i in range(1, 10): # Loop para 9 itens
-                item_text = getattr(task_obj, f'item{i}_text', '')
-                if item_text: # Só adiciona se tiver texto
-                    items_for_display.append(item_text)
-            processed_home_tasks.append({
-                'task_obj': task_obj,
-                'items_for_display': items_for_display
-            })
-        context['processed_home_tasks'] = processed_home_tasks # NOVA VARIÁVEL DE CONTEXTO
+            context = super().get_context_data(**kwargs)
+            
+            # Pré-processar as tarefas para evitar 'getattribute' no template
+            processed_home_tasks = []
+            for task_obj in self.get_queryset():
+                items_for_display = []
+                for i in range(1, 10): 
+                    item_text = getattr(task_obj, f'item{i}_text', '')
+                    if item_text:
+                        items_for_display.append(item_text)
+                processed_home_tasks.append({
+                    'task_obj': task_obj,
+                    'items_for_display': items_for_display
+                })
+            context['processed_home_tasks'] = processed_home_tasks 
 
-        context['all_notes'] = Note.objects.all().order_by('-created_at')[:5]
-        context['all_important_dates'] = ImportanteDate.objects.all().order_by('date')[:5]
-        context['daily_quote'] = QuoteOfTheDay.objects.filter(is_active=True).order_by('?').first()
-        return context
+            context['all_notes'] = Note.objects.all().order_by('-created_at')[:5]
+            
+            today = date.today()
+            day_of_month = today.day
+        
+            quote_index = (day_of_month - 1) % len(DAILY_QUOTES) 
+            context['daily_quote_text'] = DAILY_QUOTES[quote_index]
+            
+            return context
     
 class ListTasks(ListView, LoginRequiredMixin):
     model = Task

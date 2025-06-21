@@ -73,19 +73,9 @@
     background: linear-gradient(135deg, #60A5FA, #2563EB);
 }
 
-/* Regras de .task-card, .bg-gradient-cyan (antigas), .bg-gradient-blue (antigas), .arrow-btn não estão mais sendo usadas com o modelo atual de Task. */
-/* Removidas:
-.task-card { min-width: 250px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: box-shadow 0.2s; }
-.task-card:hover { box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-.bg-gradient-cyan { background: linear-gradient(135deg, #A7F3D0, #6EE7B7); color: #065F46; }
-.bg-gradient-blue { background: linear-gradient(135deg, #BFDBFE, #93C5FD); color: #1E40AF; }
-.arrow-btn { width: 48px; height: 48px; background-color: #E5E7EB; border: none; color: #6B7280; transition: background-color 0.2s; }
-.arrow-btn:hover { background-color: #D1D5DB; }
-*/
-
 .note-card {
     transition: box-shadow 0.2s;
-    border: 1px solid #E5E7EB;
+    border: 2px solid #E5E7EB;
 }
 
 .note-card:hover {
@@ -174,9 +164,6 @@
     .sidebar-toggle {
         display: none;
     }
-
-    /* .task-card já foi removido, então esta regra também não se aplica. */
-    /* .task-card { min-width: 200px; } */
 }
 
 @media (max-width: 767.98px) {
@@ -184,9 +171,6 @@
         flex-direction: row;
         gap: 1rem;
     }
-
-    /* .task-card já foi removido, então esta regra também não se aplica. */
-    /* .task-card { min-width: 180px; } */
 }
 
 ::-webkit-scrollbar {
@@ -222,7 +206,6 @@
     margin-top: 0.5rem !important;
 }
 
-/* Novas Classes para cores das CAIXAS DE CATEGORIA (baseadas em priority do modelo Task) */
 .task-category-card {
     min-height: 120px;
     height: auto;
@@ -255,7 +238,6 @@
     border: 2px solid #dc3545;
 }
 
-/* Estilos para o CONTÊINER de cada ITEM de TAREFA individual */
 .task-item-display {
     background-color: rgba(255, 255, 255, 0.85);
     border-radius: 8px;
@@ -270,7 +252,6 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Ajustes para o texto de tarefas concluídas */
 .task-item-display label.text-decoration-line-through {
     color: #6c757d;
 }
