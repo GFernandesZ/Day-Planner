@@ -129,3 +129,91 @@ function confirmDelete() {
 
 // Initialize task scrolling if needed
 setupTaskScrolling();
+
+document.addEventListener('DOMContentLoaded', function () {
+    // ... (Suas funções existentes: updateCurrentDate, generateCalendar, setupMenuHandlers, setupSidebarToggle) ...
+
+    // NOVO: Inicializar o Carrossel de Tarefas da Home
+    setupHomeTaskCarousel();
+});
+
+// ... (Suas funções existentes) ...
+
+function setupHomeTaskCarousel() {
+    const carouselContainer = document.querySelector('.home-task-carousel-container');
+    if (!carouselContainer) return;
+
+    const carouselTrack = carouselContainer.querySelector('.home-task-carousel-track');
+    const slides = carouselContainer.querySelectorAll('.home-task-carousel-slide');
+    const prevArrow = carouselContainer.querySelector('.prev-arrow');
+    const nextArrow = carouselContainer.querySelector('.next-arrow');
+
+    if (!carouselTrack || slides.length === 0 || !prevArrow || !nextArrow) return;
+
+    let currentIndex = 0;
+    // Determine o número de slides visíveis baseado na largura da tela e do slide
+    // É mais robusto ler o valor computado pelo CSS.
+    function getSlidesPerView() {
+        // Obter a largura total do wrapper (área visível do carrossel)
+        const wrapperWidth = carouselContainer.querySelector('.home-task-carousel-wrapper').offsetWidth;
+        if (slides.length === 0) return 1;
+
+        // Obter a largura de um slide, incluindo a margem
+        const slideWidthWithMargin = slides[0].offsetWidth + (parseFloat(window.getComputedStyle(slides[0]).marginRight) || 0);
+
+        if (slideWidthWithMargin === 0) return 1; // Evitar divisão por zero
+
+        // Calcula quantos slides cabem (arredonda para baixo)
+        return Math.floor(wrapperWidth / slideWidthWithMargin);
+    }
+
+    const scrollStep = 2; // Rolar 2 slides por clique, como solicitado.
+
+    // Oculta setas se não houver rolagem necessária
+    function updateArrowVisibility() {
+        const currentSlidesPerView = getSlidesPerView();
+
+        if (slides.length <= currentSlidesPerView) {
+            prevArrow.style.display = 'none';
+            nextArrow.style.display = 'none';
+        } else {
+            prevArrow.style.display = 'block';
+            nextArrow.style.display = 'block';
+        }
+
+        // Desabilita setas no início/fim
+        prevArrow.disabled = currentIndex === 0;
+        // nextArrow.disabled = currentIndex >= slides.length - currentSlidesPerView;
+        // Correção para o nextArrow, precisa permitir rolar até que o último item esteja visível
+        // Se a rolagem é de 2 em 2, o último clique pode não levar ao final exato da lista
+        nextArrow.disabled = currentIndex + currentSlidesPerView >= slides.length;
+    }
+
+    function slideCarousel() {
+        const currentSlidesPerView = getSlidesPerView();
+        if (slides.length === 0 || currentSlidesPerView === 0) return;
+
+        const slideWidthWithMargin = slides[0].offsetWidth + (parseFloat(window.getComputedStyle(slides[0]).marginRight) || 0);
+
+        // Ajusta a posição do carrossel para mostrar o currentIndex
+        // Multiplica pelo currentIndex para deslizar para a posição correta
+        carouselTrack.style.transform = `translateX(-${currentIndex * slideWidthWithMargin}px)`;
+        updateArrowVisibility();
+    }
+
+    prevArrow.addEventListener('click', () => {
+        currentIndex = Math.max(0, currentIndex - scrollStep);
+        slideCarousel();
+    });
+
+    nextArrow.addEventListener('click', () => {
+        const currentSlidesPerView = getSlidesPerView();
+        // Garante que não rolamos além do final da lista de slides
+        currentIndex = Math.min(slides.length - currentSlidesPerView, currentIndex + scrollStep);
+        slideCarousel();
+    });
+
+    // Inicializar carrossel ao carregar e ao redimensionar a janela
+    slideCarousel();
+    window.addEventListener('resize', slideCarousel); // Reajustar ao redimensionar
+}

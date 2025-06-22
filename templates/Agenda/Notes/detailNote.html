@@ -3,27 +3,6 @@
 {% load static %}
 {% block content %}
 
-<div class="d-flex min-vh-100">
-    <div class="sidebar bg-dark d-flex flex-column align-items-center py-3" id="sidebar">
-        <div class="logo bg-white rounded-3 d-flex align-items-center justify-content-center mb-4">
-            <div class="logo-inner bg-dark rounded"></div>
-        </div>
-
-        <nav class="d-flex flex-column gap-3">
-            <a href="{% url 'home_agenda' %}" class="btn menu-item">
-                <i class="fas fa-home"></i>
-            </a>
-            <a href="{% url 'list_tasks' %}" class="btn menu-item">
-                <i class="fas fa-file-text"></i>
-            </a>
-            <a href="{% url 'list_notes' %}" class="btn menu-item active"> {# Marcar como ativo #}
-                <i class="fas fa-sticky-note"></i>
-            </a>
-            <button class="btn menu-item">
-                <i class="fas fa-users"></i>
-            </button>
-        </nav>
-    </div>
 
     <div class="flex-fill d-flex flex-column main-content" id="mainContent">
         <header class="header bg-white border-bottom px-4 py-3">

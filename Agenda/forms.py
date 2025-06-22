@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from Agenda.models import Task, Note
+from Agenda.models import Date, Task, Note
 from django.forms import ModelForm
 from django import forms
 
@@ -38,4 +38,17 @@ class FormularioTask(ModelForm):
             'item7_text': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Item 7'}),
             'item8_text': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Item 8'}),
             'item9_text': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Item 9'}),
+        }
+
+class FormularioDate(ModelForm):
+    class Meta:
+        model = Date
+        fields = ['title', 'date', 'description', 'type', 'category', 'color']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ex: Aniversário, Prova...'}),
+            'date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'Detalhes da data (opcional)'}),
+            'type': forms.Select(attrs={'class': 'form-select'}),
+            'category': forms.Select(attrs={'class': 'form-select'}),
+            'color': forms.Select(attrs={'class': 'form-select'}),
         }

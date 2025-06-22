@@ -6,12 +6,16 @@ urlpatterns = [
     path('', HomeView.as_view() , name='home_agenda'),
     path('listar-anotacoes/', ListNotes.as_view(), name='list_notes'),
     path('anotacao/ver/<int:pk>/', ViewNote.as_view(), name='view_note'),
+    path('listar-datas/', ListDates.as_view(), name='list_dates'),
     path('listar-tarefas/', ListTasks.as_view(), name='list_tasks'),
     path('criar-tarefa/', CreateTask.as_view(), name='create_task'),
     path('criar-anotacao/', CreateNote.as_view(), name='create_note'),
+    path('criar-data/', CreateDate.as_view(), name='create_date'),
     path('tarefas/<int:pk>/', UpdateTask.as_view(), name='update_task'),
     path('anotacao/<int:pk>/', UpdateNote.as_view(), name='update_note'),
+    path('data/<int:pk>/', UpdateDate.as_view(), name='update_date'),
     path('deletar-tarefa/<int:pk>/', DeleteTask.as_view(), name='delete_task'),
+    path('deletar-data/<int:pk>/', DeleteDate.as_view(), name='delete_date'),
     path('deletar-anotacao/<int:pk>/', DeleteNote.as_view(), name='delete_note'),
 ]
 

@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="flex-fill d-flex flex-column main-content" id="mainContent">
+    <header class="header bg-white border-bottom px-4 py-3">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-light sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="h4 mb-0 text-dark">Datas Importantes</h1>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <a href="{% url 'create_date' %}" class="btn btn-warning">
+                    <i class="fas fa-plus me-2"></i>Nova Data
+                </a>
+                <div class="d-flex align-items-center gap-2">
+                    <div
+                        class="user-avatar bg-gradient rounded-circle d-flex align-items-center justify-content-center">
+                        <span class="text-white fw-medium">J</span>
+                    </div>
+                    <span class="text-dark fw-medium">Olá, João</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-fill p-4 bg-light overflow-auto">
+        <div class="container-fluid">
+            <section class="mb-5">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h2 class="h4 fw-bold text-success mb-0">Datas Comemorativas</h2>
+                    {# Exibir contagem dinâmica se quiser #}
+                    <small class="text-muted">{{ comemorativas|length }} datas</small>
+                </div>
+
+                <div class="row g-3">
+                    {% if comemorativas %}
+                    {% for date_data in comemorativas %} {# Este loop agora receberá apenas as datas do mês atual #}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card border-{{ date_data.obj.color }} border-opacity-25 h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div
+                                        class="badge bg-{{ date_data.obj.color }} text-white px-3 py-2 {{ date_data.month_color_class }}">
+                                        {{ date_data.obj.date|date:"d/m" }}</div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item"
+                                                    href="{% url 'update_date' pk=date_data.obj.pk %}">
+                                                    <i class="fas fa-edit me-2"></i>Editar
+                                                </a>
+                                            <a class="dropdown-item" href="{% url 'delete_date' pk=date_data.obj.pk %}">
+                                                <i class="fas fa-trash me-2"></i>Excluir
+                                            </a></li>
+                                            {% if not date_data.obj.is_fixed %}
+                                            <li><a class="dropdown-item text-danger" href="#"
+                                                    onclick="openDeleteModal('{{ date_data.obj.pk }}', '{{ date_data.obj.title }}', '{{ date_data.obj.type }}')">
+                                                    <i class="fas fa-trash me-2"></i>Excluir
+                                                </a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <h5 class="card-title h6 text-{{ date_data.obj.color }}">{{ date_data.obj.title }}</h5>
+                                <p class="card-text small text-muted mb-0">{{ date_data.obj.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="col-12">
+                        <p class="text-muted">Nenhuma data comemorativa encontrada para este mês.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </section>
+
+            <section>
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h2 class="h4 fw-bold text-primary mb-0">Datas Importantes</h2>
+                    <small class="text-muted">{{ importantes_geral|length }} datas</small>
+                </div>
+
+                <div class="row g-3">
+                    {% if importantes_geral %}
+                    {% for date_item in importantes_geral %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card border-{{ date_item.color }} border-opacity-25 h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div class="badge bg-{{ date_item.color }} text-white px-3 py-2">
+                                        {{ date_item.date|date:"d/m" }}</div>
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="{% url 'update_date' pk=date_item.pk %}">
+                                                    <i class="fas fa-edit me-2"></i>Editar
+                                                </a></li>
+                                            <li><a class="dropdown-item text-danger" href="#"
+                                                    onclick="openDeleteModal('{{ date_item.pk }}', '{{ date_item.title }}', '{{ date_item.type }}')">
+                                                    <i class="fas fa-trash me-2"></i>Excluir
+                                                </a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <h5 class="card-title h6 text-{{ date_item.color }}">{{ date_item.title }}</h5>
+                                <p class="card-text small text-muted mb-0">{{ date_item.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="col-12">
+                        <p class="text-muted">Nenhuma data importante encontrada.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+
+{# Modal de Confirmação de Exclusão (Único para datas) #}
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmar Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="deleteModalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form id="deleteDateForm" method="post" action="">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let dateToDeleteId = null;
+
+    function openDeleteModal(id, title, type) {
+        dateToDeleteId = id; // Armazena o ID
+        const modalBody = document.getElementById('deleteModalBody');
+        modalBody.innerHTML = `Tem certeza de que deseja excluir a data "<strong>${title}</strong>" (${type})? Esta ação não pode ser desfeita.`;
+
+        const deleteForm = document.getElementById('deleteDateForm');
+        deleteForm.action = `{% url 'delete_date' pk=0 %}`.replace('0', id);
+
+        const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+        deleteModal.show();
+    }
+</script>
+
+{% endblock %}

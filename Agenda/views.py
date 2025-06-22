@@ -6,9 +6,9 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from Agenda.consts import DAILY_QUOTES
-from Agenda.models import Task, Note, ImportanteDate, QuoteOfTheDay
+from Agenda.models import Task, Note, Date, QuoteOfTheDay
 from django.contrib.auth.mixins import LoginRequiredMixin
-from Agenda.forms import FormularioTask, FormularioNote
+from Agenda.forms import FormularioTask, FormularioNote, FormularioDate
 from django.core.exceptions import ObjectDoesNotExist
 
 from DayPlanner import settings
@@ -46,7 +46,27 @@ class HomeView(ListView):
         
             quote_index = (day_of_month - 1) % len(DAILY_QUOTES) 
             context['daily_quote_text'] = DAILY_QUOTES[quote_index]
+
+            current_month = today.month
+            current_year = today.year
+
+            comemorativas_home_raw = Date.objects.filter(
+                type='comemorativa',
+                date__month=current_month,
+                date__year=current_year
+            ).order_by('date')
             
+            comemorativas_home_processed = []
+            for d in comemorativas_home_raw:
+                date_data = {
+                    'obj': d, 
+                    'month_color_class': d.get_month_color_class(), 
+                }
+                comemorativas_home_processed.append(date_data)
+            context['comemorativas_home'] = comemorativas_home_processed
+            
+            context['importantes_geral_home'] = Date.objects.filter(type='importante').order_by('date')[:6]
+                
             return context
     
 class ListTasks(ListView, LoginRequiredMixin):
@@ -84,9 +104,49 @@ class ListNotes(LoginRequiredMixin, ListView):
     context_object_name = 'notes'
     template_name = 'Agenda/Notes/notes.html'
 
-class ViewNote(DetailView, LoginRequiredMixin): # NOVA VIEW
+class ListDates(LoginRequiredMixin, ListView):
+    model = Date
+    context_object_name = 'dates'
+    template_name = 'Agenda/Dates/dates.html'
+
+    def get_queryset(self):
+        return Date.objects.all() 
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        all_dates = self.get_queryset()
+        
+        # --- LÓGICA PARA FILTRAR POR MÊS ATUAL ---
+        today = date.today()
+        current_month = today.month
+        current_year = today.year
+
+        # Filtrar Datas Comemorativas APENAS DO MÊS ATUAL E ORDENAR POR DATA
+        comemorativas_raw = all_dates.filter(
+            type='comemorativa',
+            date__month=current_month, # Filtra pelo mês atual
+            date__year=current_year    # Filtra pelo ano atual
+        ).order_by('date')
+        
+        # Processa as datas para adicionar a classe de cor do mês
+        comemorativas_processed = []
+        for d in comemorativas_raw:
+            date_data = {
+                'obj': d, 
+                'month_color_class': d.get_month_color_class(), 
+            }
+            comemorativas_processed.append(date_data)
+        
+        context['comemorativas'] = comemorativas_processed
+        
+        context['importantes_geral'] = all_dates.filter(type='importante').order_by('date')
+        
+        return context
+
+class ViewNote(DetailView, LoginRequiredMixin):
     model = Note
-    context_object_name = 'note' # O objeto Note será acessível como 'note' no template
+    context_object_name = 'note'
     template_name = 'Agenda/Notes/detailNote.html'
 
 def upload_imagem(request):
@@ -114,6 +174,13 @@ class CreateNote(LoginRequiredMixin, CreateView):
     template_name = 'Agenda/Notes/createNote.html'
     success_url = reverse_lazy('list_notes')
 
+class CreateDate(LoginRequiredMixin, CreateView):
+    model = Date
+    form_class = FormularioDate
+    template_name = 'Agenda/Dates/createDate.html'
+    success_url = reverse_lazy('list_dates')
+
+
 class UpdateTask(UpdateView, LoginRequiredMixin):
     model = Task
     form_class = FormularioTask
@@ -129,6 +196,12 @@ class UpdateNote(LoginRequiredMixin, UpdateView):
     template_name = 'Agenda/Notes/editNote.html'
     success_url = reverse_lazy('list_notes')
 
+class UpdateDate(LoginRequiredMixin, UpdateView):
+    model = Date
+    form_class = FormularioDate
+    template_name = 'Agenda/Dates/editDate.html'
+    success_url = reverse_lazy('list_dates')
+
 class DeleteTask(LoginRequiredMixin, DeleteView):   
     model = Task
     template_name = 'Agenda/Tasks/deleteTask.html'
@@ -138,3 +211,8 @@ class DeleteNote(LoginRequiredMixin, DeleteView):
     model = Note
     template_name = 'Agenda/Notes/deleteNote.html'
     success_url = reverse_lazy('list_notes')
+
+class DeleteDate(LoginRequiredMixin, DeleteView):
+    model = Date
+    template_name = 'Agenda/Dates/deleteDate.html'
+    success_url = reverse_lazy('list_dates')

@@ -2,105 +2,82 @@
 {% load static %}
 {% block content %}
 
-<div class="d-flex min-vh-100">
-    <div class="sidebar bg-dark d-flex flex-column align-items-center py-3" id="sidebar">
-        <div class="logo bg-white rounded-3 d-flex align-items-center justify-content-center mb-4">
-            <div class="logo-inner bg-dark rounded"></div>
-        </div>
-
-        <nav class="d-flex flex-column gap-3">
-            <a href="{% url 'home_agenda' %}" class="btn menu-item">
-                <i class="fas fa-home"></i>
-            </a>
-            <a href="{% url 'list_tasks' %}" class="btn menu-item active">
-                <i class="fas fa-file-text"></i>
-            </a>
-            <a href="{% url 'list_notes' %}" class="btn menu-item">
-                <i class="fas fa-sticky-note"></i>
-            </a>
-            <button class="btn menu-item">
-                <i class="fas fa-users"></i>
-            </button>
-        </nav>
-    </div>
-
-    <div class="flex-fill d-flex flex-column main-content" id="mainContent">
-        <header class="header bg-white border-bottom px-4 py-3">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-3">
-                    <button class="btn btn-light sidebar-toggle" id="sidebarToggle">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <h1 class="h4 mb-0 text-dark">Gerenciar Tarefas</h1>
-                </div>
-                <div class="d-flex align-items-center gap-3">
-                    <div class="d-flex align-items-center gap-2">
-                        <div
-                            class="user-avatar bg-gradient rounded-circle d-flex align-items-center justify-content-center">
-                            <span class="text-white fw-medium">J</span>
-                        </div>
-                        <span class="text-dark fw-medium">Olá, João</span>
+<div class="flex-fill d-flex flex-column main-content" id="mainContent">
+    <header class="header bg-white border-bottom px-4 py-3">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-light sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="h4 mb-0 text-dark">Gerenciar Tarefas</h1>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center gap-2">
+                    <div
+                        class="user-avatar bg-gradient rounded-circle d-flex align-items-center justify-content-center">
+                        <span class="text-white fw-medium">J</span>
                     </div>
+                    <span class="text-dark fw-medium">Olá, João</span>
                 </div>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <main class="flex-fill p-4 bg-light overflow-auto">
-            <div class="container-fluid">
-                <div class="row g-4">
-                    {% if processed_task_categories %}
-                    {% for category_data in processed_task_categories %}
-                    <div class="col-lg-3">
-                        <div class="task-category-card p-4 rounded-4 shadow-sm 
+    <main class="flex-fill p-4 bg-light overflow-auto">
+        <div class="container-fluid">
+            <div class="row g-4">
+                {% if processed_task_categories %}
+                {% for category_data in processed_task_categories %}
+                <div class="col-lg-3">
+                    <div class="task-category-card p-4 rounded-4 shadow-sm 
                                 {{ category_data.task_obj.get_box_color_class }}">
 
-                            <h2 class="h4 fw-semibold mb-3">{{ category_data.task_obj.name }}</h2>
-                            <div class="d-flex flex-column gap-3">
-                                {% if category_data.items_for_display %}
-                                {% for item_text in category_data.items_for_display %}
-                                <div class="d-flex align-items-center gap-2 flex-grow-1 task-item-display">
-                                    <input type="checkbox" class="form-check-input task-item-checkbox-local" id="task-{{ category_data.task_obj.pk }}-item-{{ forloop.counter }}">
-                                    <label for="task-{{ category_data.task_obj.pk }}-item-{{ forloop.counter }}"
-                                        class="small">
-                                        • {{ item_text }}
-                                    </label>
-                                </div>
-                                {% endfor %}
-                                {% else %}
-                                <p class="small text-muted">Nenhum item nesta categoria.</p>
-                                {% endif %}
+                        <h2 class="h4 fw-semibold mb-3">{{ category_data.task_obj.name }}</h2>
+                        <div class="d-flex flex-column gap-3">
+                            {% if category_data.items_for_display %}
+                            {% for item_text in category_data.items_for_display %}
+                            <div class="d-flex align-items-center gap-2 flex-grow-1 task-item-display">
+                                <input type="checkbox" class="form-check-input task-item-checkbox-local"
+                                    id="task-{{ category_data.task_obj.pk }}-item-{{ forloop.counter }}">
+                                <label for="task-{{ category_data.task_obj.pk }}-item-{{ forloop.counter }}"
+                                    class="small">
+                                    • {{ item_text }}
+                                </label>
                             </div>
-                            <div class="d-flex justify-content-between mt-3 pt-3 border-top">
-                                <a href="{% url 'update_task' pk=category_data.task_obj.pk %}"
-                                    class="text-primary small">
-                                    <i class="fas fa-edit"></i> Editar
-                                </a>
-                                <a href="{% url 'delete_task' pk=category_data.task_obj.pk %}"
-                                    class="text-danger small">
-                                    <i class="fas fa-trash-alt"></i> Deletar
-                                </a>
-                            </div>
+                            {% endfor %}
+                            {% else %}
+                            <p class="small text-muted">Nenhum item nesta categoria.</p>
+                            {% endif %}
+                        </div>
+                        <div class="d-flex justify-content-between mt-3 pt-3 border-top">
+                            <a href="{% url 'update_task' pk=category_data.task_obj.pk %}" class="text-primary small">
+                                <i class="fas fa-edit"></i> Editar
+                            </a>
+                            <a href="{% url 'delete_task' pk=category_data.task_obj.pk %}" class="text-danger small">
+                                <i class="fas fa-trash-alt"></i> Deletar
+                            </a>
                         </div>
                     </div>
-                    {% endfor %}
-                    {% else %}
-                    <div class="col-12">
-                        <div class="alert alert-info text-center" role="alert">
-                            Nenhuma categoria de tarefa encontrada. <a href="{% url 'create_task' %}"
-                                class="alert-link">Crie a primeira categoria!</a>
-                        </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center" role="alert">
+                        Nenhuma categoria de tarefa encontrada. <a href="{% url 'create_task' %}"
+                            class="alert-link">Crie a primeira categoria!</a>
                     </div>
-                    {% endif %}
                 </div>
-
-                <div class="mt-4">
-                    <a href="{% url 'create_task' %}" class="btn btn-warning fw-medium px-4 py-2">
-                        Criar Nova Categoria de Tarefa
-                    </a>
-                </div>
+                {% endif %}
             </div>
-        </main>
-    </div>
+
+            <div class="mt-4">
+                <a href="{% url 'create_task' %}" class="btn btn-warning fw-medium px-4 py-2">
+                    Criar Nova Categoria de Tarefa
+                </a>
+            </div>
+        </div>
+    </main>
+</div>
 </div>
 
 <script>

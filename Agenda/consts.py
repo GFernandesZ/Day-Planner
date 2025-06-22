@@ -54,3 +54,43 @@ DAILY_QUOTES = [
     "O poder está em você. Acredite!",
     "Inspire, persista, conquiste."
 ]
+
+IMPORTANT_DATE_TYPE_CHOICES = [
+    ('comemorativa', 'Comemorativa'),
+    ('importante', 'Importante'),
+]
+
+IMPORTANT_DATE_CATEGORY_CHOICES = [
+    ('nacional', 'Nacional'),
+    ('internacional', 'Internacional'),
+    ('religiosa', 'Religiosa'),
+    ('especial', 'Especial'),
+    ('pessoal', 'Pessoal'),
+    ('academica', 'Acadêmica'),
+    ('profissional', 'Profissional'),
+    ('historica', 'Histórica'),
+]
+
+IMPORTANT_DATE_COLOR_CHOICES = [
+    ('success', 'Verde (Padrão Comemorativa)'),
+    ('primary', 'Azul'),
+    ('danger', 'Vermelho'),
+    ('warning', 'Amarelo'),
+    ('info', 'Azul Claro'),
+    ('secondary', 'Cinza'),
+]
+
+MONTH_COLORS = {
+    1: 'badge-january',    # Janeiro
+    2: 'badge-february',   # Fevereiro
+    3: 'badge-march',      # Março
+    4: 'badge-april',      # Abril
+    5: 'badge-may',        # Maio
+    6: 'badge-june',       # Junho
+    7: 'badge-july',       # Julho
+    8: 'badge-august',     # Agosto
+    9: 'badge-september',  # Setembro
+    10: 'badge-october',   # Outubro
+    11: 'badge-november',  # Novembro
+    12: 'badge-december',  # Dezembro (seu exemplo de vermelho)
+}

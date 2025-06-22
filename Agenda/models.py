@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from Agenda.consts import NOTE_BORDER_COLOR_CHOICES, TASK_BOX_COLOR_MAP, TASK_BOX_PRIORITY_CHOICES
+from Agenda.consts import IMPORTANT_DATE_CATEGORY_CHOICES, IMPORTANT_DATE_COLOR_CHOICES, IMPORTANT_DATE_TYPE_CHOICES, MONTH_COLORS, NOTE_BORDER_COLOR_CHOICES, TASK_BOX_COLOR_MAP, TASK_BOX_PRIORITY_CHOICES
 
 class Task(models.Model):
     name = models.CharField(max_length=20, verbose_name='Nome da Categoria')
@@ -43,16 +43,33 @@ class Note(models.Model):
     def __str__(self):
         return self.title
 
-class ImportanteDate(models.Model):
+class Date(models.Model):
     title = models.CharField(max_length=100, verbose_name='Título')
-    date = models.DateTimeField(verbose_name='Data')
+    date = models.DateTimeField(verbose_name='Data', blank=True, null=True)
     description = models.TextField(verbose_name='Descrição', blank=True, null=True)
+
+    type = models.CharField(max_length=20, choices=IMPORTANT_DATE_TYPE_CHOICES, default='comemorativa', verbose_name='Tipo')
+    category = models.CharField(max_length=20, choices=IMPORTANT_DATE_CATEGORY_CHOICES, blank=True, null=True, verbose_name='Categoria')
+    color = models.CharField(max_length=20, choices=IMPORTANT_DATE_COLOR_CHOICES, default='success', verbose_name='Cor')
+
+    # NOVO CAMPO: Para marcar datas que não podem ser excluídas pelo usuário
+    is_fixed = models.BooleanField(default=False, verbose_name='Data Fixa (Não Excluível)')
+
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')
 
     class Meta:
         verbose_name = 'Data Importante'
         verbose_name_plural = 'Datas Importantes'
         ordering = ['date']
+
+    def get_month_color_class(self):
+        if self.date:
+            return MONTH_COLORS.get(self.date.month, 'bg-secondary')  # Padrão cinza
+        return 'bg-secondary'
+
+    def __str__(self):
+        return self.title
+
 
 class QuoteOfTheDay(models.Model):
     text = models.TextField(verbose_name='Texto da Frase')

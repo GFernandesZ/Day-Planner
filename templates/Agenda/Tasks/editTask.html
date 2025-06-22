@@ -2,207 +2,186 @@
 {% load static %}
 {% block content %}
 
-<div class="d-flex min-vh-100">
-    <div class="sidebar bg-dark d-flex flex-column align-items-center py-3" id="sidebar">
-        <div class="logo bg-white rounded-3 d-flex align-items-center justify-content-center mb-4">
-            <div class="logo-inner bg-dark rounded"></div>
-        </div>
-
-        <nav class="d-flex flex-column gap-3">
-            <a href="{% url 'home_agenda' %}" class="btn menu-item">
-                <i class="fas fa-home"></i>
-            </a>
-            <a href="{% url 'list_tasks' %}" class="btn menu-item active">
-                <i class="fas fa-file-text"></i>
-            </a>
-            <a href="{% url 'list_notes' %}" class="btn menu-item">
-                <i class="fas fa-sticky-note"></i>
-            </a>
-            <button class="btn menu-item">
-                <i class="fas fa-users"></i>
-            </button>
-        </nav>
-    </div>
-
-    <div class="flex-fill d-flex flex-column main-content" id="mainContent">
-        <header class="header bg-white border-bottom px-4 py-3">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-3">
-                    <button class="btn btn-light sidebar-toggle" id="sidebarToggle">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <h1 class="h4 mb-0 text-dark">Editar Tarefa</h1>
-                </div>
-                <div class="d-flex align-items-center gap-3">
-                    <div class="d-flex align-items-center gap-2">
-                        <div
-                            class="user-avatar bg-gradient rounded-circle d-flex align-items-center justify-content-center">
-                            <span class="text-white fw-medium">J</span>
-                        </div>
-                        <span class="text-dark fw-medium">Olá, João</span>
+<div class="flex-fill d-flex flex-column main-content" id="mainContent">
+    <header class="header bg-white border-bottom px-4 py-3">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-light sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="h4 mb-0 text-dark">Editar Tarefa</h1>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center gap-2">
+                    <div
+                        class="user-avatar bg-gradient rounded-circle d-flex align-items-center justify-content-center">
+                        <span class="text-white fw-medium">J</span>
                     </div>
+                    <span class="text-dark fw-medium">Olá, João</span>
                 </div>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <main class="flex-fill p-4 bg-light overflow-auto">
-            <div class="container-fluid">
-                <div class="row justify-content-center">
-                    <div class="col-lg-8 col-xl-6">
-                        <div class="bg-white p-4 rounded-4 shadow-sm">
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h2 class="h4 fw-semibold mb-0">Editar Tarefa</h2>
-                                <div class="d-flex gap-2">
-                                    {# Botão de Excluir - Abre o Modal #}
-                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                                        data-bs-target="#deleteTaskConfirmModal">
-                                        <i class="fas fa-trash me-2"></i>Excluir
-                                    </button>
-                                    <a href="{% url 'list_tasks' %}" class="btn btn-link text-decoration-none">
-                                        <i class="fas fa-arrow-left me-2"></i>Voltar
-                                    </a>
-                                </div>
+    <main class="flex-fill p-4 bg-light overflow-auto">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-xl-6">
+                    <div class="bg-white p-4 rounded-4 shadow-sm">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h2 class="h4 fw-semibold mb-0">Editar Tarefa</h2>
+                            <div class="d-flex gap-2">
+                                {# Botão de Excluir - Abre o Modal #}
+                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#deleteTaskConfirmModal">
+                                    <i class="fas fa-trash me-2"></i>Excluir
+                                </button>
+                                <a href="{% url 'list_tasks' %}" class="btn btn-link text-decoration-none">
+                                    <i class="fas fa-arrow-left me-2"></i>Voltar
+                                </a>
+                            </div>
+                        </div>
+
+                        <form method="post" action="{% url 'update_task' pk=object.pk %}">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="{{ form.name.id_for_label }}" class="form-label fw-medium">Titulo</label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                <div class="text-danger small mt-1">{{ form.name.errors }}</div>
+                                {% endif %}
                             </div>
 
-                            <form method="post" action="{% url 'update_task' pk=object.pk %}">
-                                {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="{{ form.priority.id_for_label }}"
+                                    class="form-label fw-medium">Prioridade</label>
+                                {{ form.priority }}
+                                {% if form.priority.errors %}
+                                <div class="text-danger small mt-1">{{ form.priority.errors }}</div>
+                                {% endif %}
+                            </div>
 
-                                <div class="mb-3">
-                                    <label for="{{ form.name.id_for_label }}" class="form-label fw-medium">Titulo</label>
-                                    {{ form.name }}
-                                    {% if form.name.errors %}
-                                    <div class="text-danger small mt-1">{{ form.name.errors }}</div>
-                                    {% endif %}
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="{{ form.priority.id_for_label }}" class="form-label fw-medium">Prioridade</label>
-                                    {{ form.priority }}
-                                    {% if form.priority.errors %}
-                                    <div class="text-danger small mt-1">{{ form.priority.errors }}</div>
-                                    {% endif %}
-                                </div>
-
-                                {# ITENS DA LISTA (item1_text a item9_text) #}
-                                <div class="row">
-                                    <div class="col-12">
-                                        {# Item 1 #}
-                                        <div class="d-flex align-items-center gap-3 mb-3">
-                                            <div class="flex-grow-1">
-                                                <label for="{{ form.item1_text.id_for_label }}"
-                                                    class="form-label fw-medium">{{ form.item1_text.label }}</label>
-                                                {{ form.item1_text }}
-                                                {% if form.item1_text.errors %}
-                                                <div class="text-danger small mt-1">{{ form.item1_text.errors }}</div>
-                                                {% endif %}
-                                            </div>
+                            {# ITENS DA LISTA (item1_text a item9_text) #}
+                            <div class="row">
+                                <div class="col-12">
+                                    {# Item 1 #}
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <div class="flex-grow-1">
+                                            <label for="{{ form.item1_text.id_for_label }}"
+                                                class="form-label fw-medium">{{ form.item1_text.label }}</label>
+                                            {{ form.item1_text }}
+                                            {% if form.item1_text.errors %}
+                                            <div class="text-danger small mt-1">{{ form.item1_text.errors }}</div>
+                                            {% endif %}
                                         </div>
-                                        {# Item 2 #}
-                                        <div class="d-flex align-items-center gap-3 mb-3">
-                                            <div class="flex-grow-1">
-                                                <label for="{{ form.item2_text.id_for_label }}"
-                                                    class="form-label fw-medium">{{ form.item2_text.label }}</label>
-                                                {{ form.item2_text }}
-                                                {% if form.item2_text.errors %}
-                                                <div class="text-danger small mt-1">{{ form.item2_text.errors }}</div>
-                                                {% endif %}
-                                            </div>
+                                    </div>
+                                    {# Item 2 #}
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <div class="flex-grow-1">
+                                            <label for="{{ form.item2_text.id_for_label }}"
+                                                class="form-label fw-medium">{{ form.item2_text.label }}</label>
+                                            {{ form.item2_text }}
+                                            {% if form.item2_text.errors %}
+                                            <div class="text-danger small mt-1">{{ form.item2_text.errors }}</div>
+                                            {% endif %}
                                         </div>
-                                        {# Item 3 #}
-                                        <div class="d-flex align-items-center gap-3 mb-3">
-                                            <div class="flex-grow-1">
-                                                <label for="{{ form.item3_text.id_for_label }}"
-                                                    class="form-label fw-medium">{{ form.item3_text.label }}</label>
-                                                {{ form.item3_text }}
-                                                {% if form.item3_text.errors %}
-                                                <div class="text-danger small mt-1">{{ form.item3_text.errors }}</div>
-                                                {% endif %}
-                                            </div>
+                                    </div>
+                                    {# Item 3 #}
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <div class="flex-grow-1">
+                                            <label for="{{ form.item3_text.id_for_label }}"
+                                                class="form-label fw-medium">{{ form.item3_text.label }}</label>
+                                            {{ form.item3_text }}
+                                            {% if form.item3_text.errors %}
+                                            <div class="text-danger small mt-1">{{ form.item3_text.errors }}</div>
+                                            {% endif %}
                                         </div>
-                                        {# Item 4 #}
-                                        <div class="d-flex align-items-center gap-3 mb-3">
-                                            <div class="flex-grow-1">
-                                                <label for="{{ form.item4_text.id_for_label }}"
-                                                    class="form-label fw-medium">{{ form.item4_text.label }}</label>
-                                                {{ form.item4_text }}
-                                                {% if form.item4_text.errors %}
-                                                <div class="text-danger small mt-1">{{ form.item4_text.errors }}</div>
-                                                {% endif %}
-                                            </div>
+                                    </div>
+                                    {# Item 4 #}
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <div class="flex-grow-1">
+                                            <label for="{{ form.item4_text.id_for_label }}"
+                                                class="form-label fw-medium">{{ form.item4_text.label }}</label>
+                                            {{ form.item4_text }}
+                                            {% if form.item4_text.errors %}
+                                            <div class="text-danger small mt-1">{{ form.item4_text.errors }}</div>
+                                            {% endif %}
                                         </div>
-                                        {# Item 5 #}
-                                        <div class="d-flex align-items-center gap-3 mb-3">
-                                            <div class="flex-grow-1">
-                                                <label for="{{ form.item5_text.id_for_label }}"
-                                                    class="form-label fw-medium">{{ form.item5_text.label }}</label>
-                                                {{ form.item5_text }}
-                                                {% if form.item5_text.errors %}
-                                                <div class="text-danger small mt-1">{{ form.item5_text.errors }}</div>
-                                                {% endif %}
-                                            </div>
+                                    </div>
+                                    {# Item 5 #}
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <div class="flex-grow-1">
+                                            <label for="{{ form.item5_text.id_for_label }}"
+                                                class="form-label fw-medium">{{ form.item5_text.label }}</label>
+                                            {{ form.item5_text }}
+                                            {% if form.item5_text.errors %}
+                                            <div class="text-danger small mt-1">{{ form.item5_text.errors }}</div>
+                                            {% endif %}
                                         </div>
-                                        {# Item 6 #}
-                                        <div class="d-flex align-items-center gap-3 mb-3">
-                                            <div class="flex-grow-1">
-                                                <label for="{{ form.item6_text.id_for_label }}"
-                                                    class="form-label fw-medium">{{ form.item6_text.label }}</label>
-                                                {{ form.item6_text }}
-                                                {% if form.item6_text.errors %}
-                                                <div class="text-danger small mt-1">{{ form.item6_text.errors }}</div>
-                                                {% endif %}
-                                            </div>
+                                    </div>
+                                    {# Item 6 #}
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <div class="flex-grow-1">
+                                            <label for="{{ form.item6_text.id_for_label }}"
+                                                class="form-label fw-medium">{{ form.item6_text.label }}</label>
+                                            {{ form.item6_text }}
+                                            {% if form.item6_text.errors %}
+                                            <div class="text-danger small mt-1">{{ form.item6_text.errors }}</div>
+                                            {% endif %}
                                         </div>
-                                        {# Item 7 #}
-                                        <div class="d-flex align-items-center gap-3 mb-3">
-                                            <div class="flex-grow-1">
-                                                <label for="{{ form.item7_text.id_for_label }}"
-                                                    class="form-label fw-medium">{{ form.item7_text.label }}</label>
-                                                {{ form.item7_text }}
-                                                {% if form.item7_text.errors %}
-                                                <div class="text-danger small mt-1">{{ form.item7_text.errors }}</div>
-                                                {% endif %}
-                                            </div>
+                                    </div>
+                                    {# Item 7 #}
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <div class="flex-grow-1">
+                                            <label for="{{ form.item7_text.id_for_label }}"
+                                                class="form-label fw-medium">{{ form.item7_text.label }}</label>
+                                            {{ form.item7_text }}
+                                            {% if form.item7_text.errors %}
+                                            <div class="text-danger small mt-1">{{ form.item7_text.errors }}</div>
+                                            {% endif %}
                                         </div>
-                                        {# Item 8 #}
-                                        <div class="d-flex align-items-center gap-3 mb-3">
-                                            <div class="flex-grow-1">
-                                                <label for="{{ form.item8_text.id_for_label }}"
-                                                    class="form-label fw-medium">{{ form.item8_text.label }}</label>
-                                                {{ form.item8_text }}
-                                                {% if form.item8_text.errors %}
-                                                <div class="text-danger small mt-1">{{ form.item8_text.errors }}</div>
-                                                {% endif %}
-                                            </div>
+                                    </div>
+                                    {# Item 8 #}
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <div class="flex-grow-1">
+                                            <label for="{{ form.item8_text.id_for_label }}"
+                                                class="form-label fw-medium">{{ form.item8_text.label }}</label>
+                                            {{ form.item8_text }}
+                                            {% if form.item8_text.errors %}
+                                            <div class="text-danger small mt-1">{{ form.item8_text.errors }}</div>
+                                            {% endif %}
                                         </div>
-                                        {# Item 9 #}
-                                        <div class="d-flex align-items-center gap-3 mb-3">
-                                            <div class="flex-grow-1">
-                                                <label for="{{ form.item9_text.id_for_label }}"
-                                                    class="form-label fw-medium">{{ form.item9_text.label }}</label>
-                                                {{ form.item9_text }}
-                                                {% if form.item9_text.errors %}
-                                                <div class="text-danger small mt-1">{{ form.item9_text.errors }}</div>
-                                                {% endif %}
-                                            </div>
+                                    </div>
+                                    {# Item 9 #}
+                                    <div class="d-flex align-items-center gap-3 mb-3">
+                                        <div class="flex-grow-1">
+                                            <label for="{{ form.item9_text.id_for_label }}"
+                                                class="form-label fw-medium">{{ form.item9_text.label }}</label>
+                                            {{ form.item9_text }}
+                                            {% if form.item9_text.errors %}
+                                            <div class="text-danger small mt-1">{{ form.item9_text.errors }}</div>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="d-flex gap-3">
-                                    <button type="submit" class="btn btn-warning fw-medium px-4 py-2">
-                                        <i class="fas fa-save me-2"></i>Salvar Alterações
-                                    </button>
-                                    <a href="{% url 'list_tasks' %}" class="btn btn-outline-secondary px-4 py-2">
-                                        Cancelar
-                                    </a>
-                                </div>
-                            </form>
-                        </div>
+                            <div class="d-flex gap-3">
+                                <button type="submit" class="btn btn-warning fw-medium px-4 py-2">
+                                    <i class="fas fa-save me-2"></i>Salvar Alterações
+                                </button>
+                                <a href="{% url 'list_tasks' %}" class="btn btn-outline-secondary px-4 py-2">
+                                    Cancelar
+                                </a>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
+</div>
 </div>
 
 {# Modal de Confirmação de Exclusão para Tarefas #}
