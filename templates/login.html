@@ -30,7 +30,7 @@
                 <div class="text-danger mb-3">{{ mensagem }}</div>
                 {% endif %}
                 <div class="d-flex justify-content-end mb-3">
-                    <a href="#" class="small text-decoration-none">Esqueci minha senha</a>
+                    <a href="{% url 'register' %}" class="small text-decoration-none">Esqueci minha senha</a>
                 </div>
                 <button type="submit" class="custom-btn w-100">Entrar</button>
             </form>

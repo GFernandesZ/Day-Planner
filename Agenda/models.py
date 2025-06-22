@@ -1,8 +1,12 @@
 from django.db import models
 from django.utils import timezone
 from Agenda.consts import IMPORTANT_DATE_CATEGORY_CHOICES, IMPORTANT_DATE_COLOR_CHOICES, IMPORTANT_DATE_TYPE_CHOICES, MONTH_COLORS, NOTE_BORDER_COLOR_CHOICES, TASK_BOX_COLOR_MAP, TASK_BOX_PRIORITY_CHOICES
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class Task(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Proprietário', null=True, blank=True)
     name = models.CharField(max_length=20, verbose_name='Nome da Categoria')
     priority = models.CharField(
         max_length=20,
@@ -27,6 +31,7 @@ class Task(models.Model):
         return self.name
 
 class Note(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Proprietário', null=True, blank=True)
     title = models.CharField(max_length=100, verbose_name='Título')
     topic = models.CharField(max_length=100, verbose_name='Tópico', blank=True, null=True)
     content = models.TextField(verbose_name='Conteúdo')
@@ -44,6 +49,7 @@ class Note(models.Model):
         return self.title
 
 class Date(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Proprietário', null=True, blank=True)
     title = models.CharField(max_length=100, verbose_name='Título')
     date = models.DateTimeField(verbose_name='Data', blank=True, null=True)
     description = models.TextField(verbose_name='Descrição', blank=True, null=True)
@@ -52,7 +58,6 @@ class Date(models.Model):
     category = models.CharField(max_length=20, choices=IMPORTANT_DATE_CATEGORY_CHOICES, blank=True, null=True, verbose_name='Categoria')
     color = models.CharField(max_length=20, choices=IMPORTANT_DATE_COLOR_CHOICES, default='success', verbose_name='Cor')
 
-    # NOVO CAMPO: Para marcar datas que não podem ser excluídas pelo usuário
     is_fixed = models.BooleanField(default=False, verbose_name='Data Fixa (Não Excluível)')
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Criado em')

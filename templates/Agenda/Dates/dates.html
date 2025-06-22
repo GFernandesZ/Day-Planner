@@ -20,7 +20,7 @@
                         class="user-avatar bg-gradient rounded-circle d-flex align-items-center justify-content-center">
                         <span class="text-white fw-medium">J</span>
                     </div>
-                    <span class="text-dark fw-medium">Olá, João</span>
+                    <span class="text-dark fw-medium">Olá, {{ request.user.first_name|default:request.user.username }}</span>
                 </div>
             </div>
         </div>
@@ -30,14 +30,13 @@
         <div class="container-fluid">
             <section class="mb-5">
                 <div class="d-flex align-items-center justify-content-between mb-3">
-                    <h2 class="h4 fw-bold text-success mb-0">Datas Comemorativas</h2>
-                    {# Exibir contagem dinâmica se quiser #}
-                    <small class="text-muted">{{ comemorativas|length }} datas</small>
+                    <h2 class="h4 fw-bold text-success mb-0">Datas Comemorativas - Usuario</h2>
+                    <small class="text-muted">{{ comemorativas_home|length }} datas</small>
                 </div>
 
                 <div class="row g-3">
-                    {% if comemorativas %}
-                    {% for date_data in comemorativas %} {# Este loop agora receberá apenas as datas do mês atual #}
+                    {% if comemorativas_home %}
+                    {% for date_data in comemorativas_home %}
                     <div class="col-md-6 col-lg-4">
                         <div class="card border-{{ date_data.obj.color }} border-opacity-25 h-100">
                             <div class="card-body">
@@ -54,9 +53,11 @@
                                                     href="{% url 'update_date' pk=date_data.obj.pk %}">
                                                     <i class="fas fa-edit me-2"></i>Editar
                                                 </a>
-                                            <a class="dropdown-item" href="{% url 'delete_date' pk=date_data.obj.pk %}">
-                                                <i class="fas fa-trash me-2"></i>Excluir
-                                            </a></li>
+                                                <a class="dropdown-item"
+                                                    href="{% url 'delete_date' pk=date_data.obj.pk %}">
+                                                    <i class="fas fa-trash me-2"></i>Excluir
+                                                </a>
+                                            </li>
                                             {% if not date_data.obj.is_fixed %}
                                             <li><a class="dropdown-item text-danger" href="#"
                                                     onclick="openDeleteModal('{{ date_data.obj.pk }}', '{{ date_data.obj.title }}', '{{ date_data.obj.type }}')">
@@ -83,12 +84,12 @@
             <section>
                 <div class="d-flex align-items-center justify-content-between mb-3">
                     <h2 class="h4 fw-bold text-primary mb-0">Datas Importantes</h2>
-                    <small class="text-muted">{{ importantes_geral|length }} datas</small>
+                    <small class="text-muted">{{ importantes_geral_home|length }} datas</small>
                 </div>
 
                 <div class="row g-3">
-                    {% if importantes_geral %}
-                    {% for date_item in importantes_geral %}
+                    {% if importantes_geral_home %}
+                    {% for date_item in importantes_geral_home %}
                     <div class="col-md-6 col-lg-4">
                         <div class="card border-{{ date_item.color }} border-opacity-25 h-100">
                             <div class="card-body">
@@ -127,7 +128,6 @@
     </main>
 </div>
 
-{# Modal de Confirmação de Exclusão (Único para datas) #}
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">

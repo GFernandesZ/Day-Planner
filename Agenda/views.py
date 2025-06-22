@@ -4,28 +4,29 @@ from django.http import FileResponse, Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView, TemplateView
 from Agenda.consts import DAILY_QUOTES
 from Agenda.models import Task, Note, Date, QuoteOfTheDay
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from Agenda.forms import FormularioTask, FormularioNote, FormularioDate
 from django.core.exceptions import ObjectDoesNotExist
-
 from DayPlanner import settings
+
+class OwnerRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+    def test_func(self):
+        obj = self.get_object()
+        return obj.owner == self.request.user
 
 class HomeView(ListView):
     model = Task
     context_object_name = 'home_tasks' 
     template_name = 'Agenda/home.html'
     def get_queryset(self):
-            # Ex: 5 tarefas não concluídas mais recentes ou as de maior ordem.
-            # Mantemos esta query para as "home_tasks"
-        return Task.objects.all().order_by('priority', 'name')[:5] 
+        return Task.objects.filter(owner=self.request.user).order_by('priority', 'name')[:5] 
 
     def get_context_data(self, **kwargs):
             context = super().get_context_data(**kwargs)
             
-            # Pré-processar as tarefas para evitar 'getattribute' no template
             processed_home_tasks = []
             for task_obj in self.get_queryset():
                 items_for_display = []
@@ -39,7 +40,7 @@ class HomeView(ListView):
                 })
             context['processed_home_tasks'] = processed_home_tasks 
 
-            context['all_notes'] = Note.objects.all().order_by('-created_at')[:5]
+            context['all_notes'] = Note.objects.filter(owner=self.request.user).order_by('-created_at')[:5]
             
             today = date.today()
             day_of_month = today.day
@@ -51,6 +52,7 @@ class HomeView(ListView):
             current_year = today.year
 
             comemorativas_home_raw = Date.objects.filter(
+                is_fixed=True,
                 type='comemorativa',
                 date__month=current_month,
                 date__year=current_year
@@ -65,7 +67,7 @@ class HomeView(ListView):
                 comemorativas_home_processed.append(date_data)
             context['comemorativas_home'] = comemorativas_home_processed
             
-            context['importantes_geral_home'] = Date.objects.filter(type='importante').order_by('date')[:6]
+            context['importantes_geral_home'] = Date.objects.filter(owner=self.request.user, type='importante').order_by('date')[:5]
                 
             return context
     
@@ -75,8 +77,7 @@ class ListTasks(ListView, LoginRequiredMixin):
     template_name = 'Agenda/Tasks/tasks.html'
 
     def get_queryset(self):
-        # Ordena as categorias de tarefas por prioridade e depois por nome
-        return Task.objects.all().order_by('priority', 'name') 
+        return Task.objects.filter(owner=self.request.user).order_by('priority', 'name')
 
     def get_context_data(self, **kwargs):
         # Prepara a lista de itens para cada tarefa para ser exibida no template
@@ -103,6 +104,8 @@ class ListNotes(LoginRequiredMixin, ListView):
     model = Note
     context_object_name = 'notes'
     template_name = 'Agenda/Notes/notes.html'
+    def get_queryset(self):
+        return Note.objects.filter(owner=self.request.user).order_by('-created_at')
 
 class ListDates(LoginRequiredMixin, ListView):
     model = Date
@@ -110,26 +113,24 @@ class ListDates(LoginRequiredMixin, ListView):
     template_name = 'Agenda/Dates/dates.html'
 
     def get_queryset(self):
-        return Date.objects.all() 
+        return Date.objects.filter(owner=self.request.user).order_by('date') 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        all_dates = self.get_queryset()
+        all_dates_queryset = self.get_queryset() # Todas as datas, sem filtro inicial
         
-        # --- LÓGICA PARA FILTRAR POR MÊS ATUAL ---
         today = date.today()
         current_month = today.month
         current_year = today.year
 
-        # Filtrar Datas Comemorativas APENAS DO MÊS ATUAL E ORDENAR POR DATA
-        comemorativas_raw = all_dates.filter(
+        comemorativas_raw = all_dates_queryset.filter(
             type='comemorativa',
-            date__month=current_month, # Filtra pelo mês atual
-            date__year=current_year    # Filtra pelo ano atual
+            is_fixed=True, # Apenas as fixas
+            date__month=current_month,
+            date__year=current_year
         ).order_by('date')
         
-        # Processa as datas para adicionar a classe de cor do mês
         comemorativas_processed = []
         for d in comemorativas_raw:
             date_data = {
@@ -137,11 +138,15 @@ class ListDates(LoginRequiredMixin, ListView):
                 'month_color_class': d.get_month_color_class(), 
             }
             comemorativas_processed.append(date_data)
+        context['comemorativas_home'] = comemorativas_processed 
+
+        importantes_geral_home = all_dates_queryset.filter(
+            type='importante',
+            owner=self.request.user
+        ).order_by('date')
         
-        context['comemorativas'] = comemorativas_processed
-        
-        context['importantes_geral'] = all_dates.filter(type='importante').order_by('date')
-        
+        context['importantes_geral_home'] = importantes_geral_home
+
         return context
 
 class ViewNote(DetailView, LoginRequiredMixin):
@@ -166,6 +171,7 @@ class CreateTask(CreateView, LoginRequiredMixin):
     success_url = reverse_lazy('list_tasks')
 
     def form_valid(self, form):
+        form.instance.owner = self.request.user
         return super().form_valid(form)
 
 class CreateNote(LoginRequiredMixin, CreateView):
@@ -174,14 +180,22 @@ class CreateNote(LoginRequiredMixin, CreateView):
     template_name = 'Agenda/Notes/createNote.html'
     success_url = reverse_lazy('list_notes')
 
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
 class CreateDate(LoginRequiredMixin, CreateView):
     model = Date
     form_class = FormularioDate
     template_name = 'Agenda/Dates/createDate.html'
     success_url = reverse_lazy('list_dates')
 
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
-class UpdateTask(UpdateView, LoginRequiredMixin):
+
+class UpdateTask(UpdateView, OwnerRequiredMixin):
     model = Task
     form_class = FormularioTask
     template_name = 'Agenda/Tasks/editTask.html'
@@ -190,29 +204,54 @@ class UpdateTask(UpdateView, LoginRequiredMixin):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
-class UpdateNote(LoginRequiredMixin, UpdateView):
+class UpdateNote(OwnerRequiredMixin, UpdateView):
     model = Note
     form_class = FormularioNote
     template_name = 'Agenda/Notes/editNote.html'
     success_url = reverse_lazy('list_notes')
 
-class UpdateDate(LoginRequiredMixin, UpdateView):
+class UpdateDate(OwnerRequiredMixin, UpdateView):
     model = Date
     form_class = FormularioDate
     template_name = 'Agenda/Dates/editDate.html'
     success_url = reverse_lazy('list_dates')
 
-class DeleteTask(LoginRequiredMixin, DeleteView):   
+class DeleteTask(OwnerRequiredMixin, DeleteView):   
     model = Task
     template_name = 'Agenda/Tasks/deleteTask.html'
     success_url = reverse_lazy('list_tasks')
 
-class DeleteNote(LoginRequiredMixin, DeleteView):
+class DeleteNote(OwnerRequiredMixin, DeleteView):
     model = Note
     template_name = 'Agenda/Notes/deleteNote.html'
     success_url = reverse_lazy('list_notes')
 
-class DeleteDate(LoginRequiredMixin, DeleteView):
+class DeleteDate(OwnerRequiredMixin, DeleteView):
     model = Date
     template_name = 'Agenda/Dates/deleteDate.html'
     success_url = reverse_lazy('list_dates')
+
+
+class ProfileView(LoginRequiredMixin, TemplateView):
+    template_name = 'Agenda/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        context['user_profile'] = user
+        context['user_name'] = user.get_full_name() or user.username
+        context['user_email'] = user.email or 'Não informado'
+        context['user_initials'] = ''.join([name[0] for name in user.get_full_name().split()]).upper() if user.get_full_name() else user.username[0].upper()
+        
+        context['completed_tasks_count'] = Task.objects.filter(owner=user).count()
+        context['created_notes_count'] = Note.objects.filter(owner=user).count()
+        context['important_dates_count'] = Date.objects.filter(owner=user).count()
+        
+        if user.date_joined:
+            days_since_joined = (date.today() - user.date_joined.date()).days
+            context['days_of_use'] = days_since_joined
+        else:
+            context['days_of_use'] = 0
+
+        return context

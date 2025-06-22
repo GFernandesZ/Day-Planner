@@ -2,6 +2,8 @@ from django.forms import ModelForm
 from Agenda.models import Date, Task, Note
 from django.forms import ModelForm
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User 
 
 class FormularioNote(ModelForm):
     class Meta:
@@ -51,4 +53,17 @@ class FormularioDate(ModelForm):
             'type': forms.Select(attrs={'class': 'form-select'}),
             'category': forms.Select(attrs={'class': 'form-select'}),
             'color': forms.Select(attrs={'class': 'form-select'}),
+        }
+
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'input-field', 'placeholder': 'Seu nome de usuário'}),
+            'email': forms.EmailInput(attrs={'class': 'input-field', 'placeholder': 'seu@email.com'}),
+            'password': forms.PasswordInput(attrs={'class': 'input-field', 'placeholder': '••••••••'}),
+            'password2': forms.PasswordInput(attrs={'class': 'input-field', 'placeholder': '••••••••'}),
         }

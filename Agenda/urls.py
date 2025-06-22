@@ -4,6 +4,7 @@ from Agenda.views import *
 
 urlpatterns = [
     path('', HomeView.as_view() , name='home_agenda'),
+    path('profile/', ProfileView.as_view(), name='profile'),
     path('listar-anotacoes/', ListNotes.as_view(), name='list_notes'),
     path('anotacao/ver/<int:pk>/', ViewNote.as_view(), name='view_note'),
     path('listar-datas/', ListDates.as_view(), name='list_dates'),

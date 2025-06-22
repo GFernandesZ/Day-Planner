@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="flex-fill d-flex flex-column main-content" id="mainContent">
+    <div class="profile-container">
+        <div class="profile-card">
+            <a href="{% url 'home_agenda' %}" class="btn back-btn">
+                ← Voltar ao Dashboard
+            </a>
+
+            <div class="text-center mb-8">
+                <div class="avatar-container">
+                    <div class="avatar-inner" id="avatarInitials">{{ user_initials }}</div>
+                </div>
+                <h1 class="text-2xl font-bold text-gray-800 mb-2" id="userName">{{ user_name }}</h1>
+                <p class="text-gray-600" id="userEmail">{{ user_email }}</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">{{ completed_tasks_count }}</div>
+                    <div class="stat-label">Categorias de Tarefas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ created_notes_count }}</div>
+                    <div class="stat-label">Notas Criadas</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ important_dates_count }}</div>
+                    <div class="stat-label">Datas Importantes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">{{ days_of_use }}</div>
+                    <div class="stat-label">Dias de Uso</div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-row">
+                    <div>
+                        <div class="info-label">Nome completo</div>
+                        <div class="info-value" id="profileName">{{ user_name }}</div>
+                    </div>
+                </div>
+
+                <div class="info-row">
+                    <div>
+                        <div class="info-label">Email</div>
+                        <div class="info-value" id="profileEmail">{{ user_email }}</div>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <div>
+                        <div class="info-label">Membro desde</div>
+                        <div class="info-value">{{ user_profile.date_joined|date:"F Y" }}</div> {# Ex: "Junho 2024" #}
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Configurações</h3>
+
+                <div class="info-row">
+                    <div>
+                        <div class="info-label">Senha</div>
+                        <div class="info-value">••••••••</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -2,105 +2,112 @@
 {% load static %}
 {% block content %}
 
-    <div class="flex-fill d-flex flex-column main-content" id="mainContent">
-        <header class="header bg-white border-bottom px-4 py-3">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-3">
-                    <button class="btn btn-light sidebar-toggle" id="sidebarToggle">
-                        <i class="fas fa-bars"></i>
-                    </button>
-                    <h1 class="h4 mb-0 text-dark">Editar Anotação</h1>
-                </div>
-                <div class="d-flex align-items-center gap-3">
-                    <div class="d-flex align-items-center gap-2">
-                        <div
-                            class="user-avatar bg-gradient rounded-circle d-flex align-items-center justify-content-center">
-                            <span class="text-white fw-medium">J</span>
-                        </div>
-                        <span class="text-dark fw-medium">Olá, João</span>
+<div class="flex-fill d-flex flex-column main-content" id="mainContent">
+    <header class="header bg-white border-bottom px-4 py-3">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-light sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="h4 mb-0 text-dark">Editar Anotação</h1>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center gap-2">
+                    <div
+                        class="user-avatar bg-gradient rounded-circle d-flex align-items-center justify-content-center">
+                        <span class="text-white fw-medium">J</span>
                     </div>
+                    <span class="text-dark fw-medium">Olá, {{ request.user.first_name|default:request.user.username }}</span>
                 </div>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <main class="flex-fill p-4 bg-light overflow-auto">
-            <div class="container-fluid">
-                <div class="row justify-content-center">
-                    <div class="col-lg-10 col-xl-8">
-                        <div class="bg-white p-4 rounded-4 shadow-sm">
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h2 class="h4 fw-semibold mb-0">Editar Anotação</h2>
-                                <div class="d-flex gap-2">
-                                    <a href="{% url 'delete_note' pk=note.pk %}" class="btn btn-danger btn-sm">Deletar</a>
+    <main class="flex-fill p-4 bg-light overflow-auto">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 col-xl-8">
+                    <div class="bg-white p-4 rounded-4 shadow-sm">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h2 class="h4 fw-semibold mb-0">Editar Anotação</h2>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'delete_note' pk=note.pk %}" class="btn btn-danger btn-sm">Deletar</a>
+                            </div>
+                        </div>
+
+                        <form method="post" action="{% url 'update_note' pk=object.pk %}" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            {# Campo Título (title) #}
+                            <div class="mb-3">
+                                <label for="{{ form.title.id_for_label }}" class="form-label fw-medium">Título</label>
+                                {{ form.title }}
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="mb-3">
+                                        <label for="{{ form.topic.id_for_label }}"
+                                            class="form-label fw-medium">Tópico</label>
+                                        {{ form.topic }}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="{{ form.border_color.id_for_label }}"
+                                            class="form-label fw-medium">Cor da Borda</label>
+                                        {{ form.border_color }}
+                                    </div>
                                 </div>
                             </div>
 
-                            <form method="post" action="{% url 'update_note' pk=object.pk %}" enctype="multipart/form-data">
-                                {% csrf_token %}
-
-                                {# Campo Título (title) #}
-                                <div class="mb-3">
-                                    <label for="{{ form.title.id_for_label }}" class="form-label fw-medium">Título</label>
-                                    {{ form.title }}
-                                </div>
-
-
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <div class="mb-3">
-                                            <label for="{{ form.topic.id_for_label }}" class="form-label fw-medium">Tópico</label>
-                                            {{ form.topic }}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="mb-3">
-                                            <label for="{{ form.border_color.id_for_label }}"
-                                                class="form-label fw-medium">Cor da Borda</label>
-                                            {{ form.border_color }}
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="mb-3"> {# Campo de upload de foto #}
-                                    <label for="{{ form.foto.id_for_label }}" class="form-label fw-medium">{{ form.foto.label }}</label>
-                                    {# Exibir a imagem atual se existir #}
-                                    {% if object.foto %} {# Use object.foto #}
-                                    <div class="mb-2">
-                                        <img src="{{ object.foto.url }}" alt="Foto da Anotação" class="img-fluid rounded" style="max-height: 200px;">
-                                        <small class="d-block text-muted mt-1">Foto atual (substituirá ao enviar nova)</small>
-                                        {# Opcional: Adicionar um checkbox para "Limpar foto" #}
-                                        {% if form.foto.url %} {# Somente se já tiver uma foto #}
-                                        <div class="form-check">
-                                            <input type="checkbox" name="foto-clear" id="foto-clear" class="form-check-input">
-                                            <label for="foto-clear" class="form-check-label">Remover foto atual</label>
-                                        </div>
-                                        {% endif %}
+                            <div class="mb-3"> {# Campo de upload de foto #}
+                                <label for="{{ form.foto.id_for_label }}" class="form-label fw-medium">{{
+                                    form.foto.label }}</label>
+                                {# Exibir a imagem atual se existir #}
+                                {% if object.foto %} {# Use object.foto #}
+                                <div class="mb-2">
+                                    <img src="{{ object.foto.url }}" alt="Foto da Anotação" class="img-fluid rounded"
+                                        style="max-height: 200px;">
+                                    <small class="d-block text-muted mt-1">Foto atual (substituirá ao enviar
+                                        nova)</small>
+                                    {# Opcional: Adicionar um checkbox para "Limpar foto" #}
+                                    {% if form.foto.url %} {# Somente se já tiver uma foto #}
+                                    <div class="form-check">
+                                        <input type="checkbox" name="foto-clear" id="foto-clear"
+                                            class="form-check-input">
+                                        <label for="foto-clear" class="form-check-label">Remover foto atual</label>
                                     </div>
                                     {% endif %}
-                                    {{ form.foto }}
-                                    {% if form.foto.errors %}<div class="text-danger small mt-1">{{ form.foto.errors }}</div>{% endif %}
                                 </div>
+                                {% endif %}
+                                {{ form.foto }}
+                                {% if form.foto.errors %}<div class="text-danger small mt-1">{{ form.foto.errors }}
+                                </div>{% endif %}
+                            </div>
 
-                                <div class="mb-4">
-                                    <label for="{{ form.content.id_for_label }}" class="form-label fw-medium">Conteúdo/Descrição</label>
-                                    {{ form.content }}
-                                </div>
+                            <div class="mb-4">
+                                <label for="{{ form.content.id_for_label }}"
+                                    class="form-label fw-medium">Conteúdo/Descrição</label>
+                                {{ form.content }}
+                            </div>
 
-                                <div class="d-flex gap-3">
-                                    <button type="submit" class="btn btn-warning fw-medium px-4 py-2">
-                                        <i class="fas fa-save me-2"></i>Salvar Alterações
-                                    </button>
-                                    <a href="{% url 'list_notes' %}" class="btn btn-outline-secondary px-4 py-2">
-                                        Cancelar
-                                    </a>
-                                </div>
-                            </form>
-                        </div>
+                            <div class="d-flex gap-3">
+                                <button type="submit" class="btn btn-warning fw-medium px-4 py-2">
+                                    <i class="fas fa-save me-2"></i>Salvar Alterações
+                                </button>
+                                <a href="{% url 'list_notes' %}" class="btn btn-outline-secondary px-4 py-2">
+                                    Cancelar
+                                </a>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
+</div>
 </div>
 
 {% endblock %}

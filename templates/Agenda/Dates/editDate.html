@@ -3,107 +3,110 @@
 {% block content %}
 
 
-    <div class="flex-fill d-flex flex-column main-content" id="mainContent">
-        <header class="header bg-white border-bottom px-4 py-3">
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center gap-3">
-                    <button class="btn btn-light sidebar-toggle" id="sidebarToggle">
-                        <i class="fas fa-bars"></i>
+<div class="flex-fill d-flex flex-column main-content" id="mainContent">
+    <header class="header bg-white border-bottom px-4 py-3">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-light sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="h4 mb-0 text-dark">Editar Data Importante</h1>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-flex gap-2">
+                    {# Botão de Excluir #}
+                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#deleteImportantDateConfirmModal">
+                        <i class="fas fa-trash me-2"></i>Excluir
                     </button>
-                    <h1 class="h4 mb-0 text-dark">Editar Data Importante</h1>
+                    <a href="{% url 'list_dates' %}" class="btn btn-link text-decoration-none">
+                        <i class="fas fa-arrow-left me-2"></i>Voltar
+                    </a>
                 </div>
-                <div class="d-flex align-items-center gap-3">
-                    <div class="d-flex gap-2">
-                        {# Botão de Excluir #}
-                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#deleteImportantDateConfirmModal">
-                            <i class="fas fa-trash me-2"></i>Excluir
-                        </button>
-                        <a href="{% url 'list_dates' %}" class="btn btn-link text-decoration-none">
-                            <i class="fas fa-arrow-left me-2"></i>Voltar
-                        </a>
+                <div class="d-flex align-items-center gap-2">
+                    <div
+                        class="user-avatar bg-gradient rounded-circle d-flex align-items-center justify-content-center">
+                        <span class="text-white fw-medium">J</span>
                     </div>
-                    <div class="d-flex align-items-center gap-2">
-                        <div
-                            class="user-avatar bg-gradient rounded-circle d-flex align-items-center justify-content-center">
-                            <span class="text-white fw-medium">J</span>
-                        </div>
-                        <span class="text-dark fw-medium">Olá, João</span>
-                    </div>
+                    <span class="text-dark fw-medium">Olá, {{ request.user.first_name|default:request.user.username }}</span>
                 </div>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <main class="flex-fill p-4 bg-light overflow-auto">
-            <div class="container-fluid">
-                <div class="row justify-content-center">
-                    <div class="col-lg-8 col-xl-6">
-                        <div class="bg-white p-4 rounded-4 shadow-sm">
-                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                <h2 class="h4 fw-semibold mb-0">Editar Data</h2>
+    <main class="flex-fill p-4 bg-light overflow-auto">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-xl-6">
+                    <div class="bg-white p-4 rounded-4 shadow-sm">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h2 class="h4 fw-semibold mb-0">Editar Data</h2>
+                        </div>
+
+                        <form method="post" action="{% url 'update_date' pk=object.pk %}">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="{{ form.title.id_for_label }}" class="form-label fw-medium">Título da
+                                    Data</label>
+                                {{ form.title }}
+                                {% if form.title.errors %}<div class="text-danger small mt-1">{{ form.title.errors
+                                    }}</div>{% endif %}
                             </div>
 
-                            <form method="post" action="{% url 'update_date' pk=object.pk %}">
-                                {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="{{ form.date.id_for_label }}" class="form-label fw-medium">Data</label>
+                                {{ form.date }}
+                                {% if form.date.errors %}<div class="text-danger small mt-1">{{ form.date.errors }}
+                                </div>{% endif %}
+                            </div>
 
-                                <div class="mb-3">
-                                    <label for="{{ form.title.id_for_label }}" class="form-label fw-medium">Título da Data</label>
-                                    {{ form.title }}
-                                    {% if form.title.errors %}<div class="text-danger small mt-1">{{ form.title.errors
-                                        }}</div>{% endif %}
-                                </div>
+                            <div class="mb-3">
+                                <label for="{{ form.type.id_for_label }}" class="form-label fw-medium">Tipo da
+                                    Data</label>
+                                {{ form.type }}
+                                {% if form.type.errors %}<div class="text-danger small mt-1">{{ form.type.errors }}
+                                </div>{% endif %}
+                            </div>
 
-                                <div class="mb-3">
-                                    <label for="{{ form.date.id_for_label }}" class="form-label fw-medium">Data</label>
-                                    {{ form.date }}
-                                    {% if form.date.errors %}<div class="text-danger small mt-1">{{ form.date.errors }}
-                                    </div>{% endif %}
-                                </div>
+                            <div class="mb-3">
+                                <label for="{{ form.category.id_for_label }}" class="form-label fw-medium">Categoria da
+                                    Data</label>
+                                {{ form.category }}
+                                {% if form.category.errors %}<div class="text-danger small mt-1">{{
+                                    form.category.errors }}</div>{% endif %}
+                            </div>
 
-                                <div class="mb-3">
-                                    <label for="{{ form.type.id_for_label }}" class="form-label fw-medium">Tipo da Data</label>
-                                    {{ form.type }}
-                                    {% if form.type.errors %}<div class="text-danger small mt-1">{{ form.type.errors }}
-                                    </div>{% endif %}
-                                </div>
+                            <div class="mb-3">
+                                <label for="{{ form.color.id_for_label }}" class="form-label fw-medium">Cor</label>
+                                {{ form.color }}
+                                {% if form.color.errors %}<div class="text-danger small mt-1">{{ form.color.errors
+                                    }}</div>{% endif %}
+                            </div>
 
-                                <div class="mb-3">
-                                    <label for="{{ form.category.id_for_label }}" class="form-label fw-medium">Categoria da Data</label>
-                                    {{ form.category }}
-                                    {% if form.category.errors %}<div class="text-danger small mt-1">{{
-                                        form.category.errors }}</div>{% endif %}
-                                </div>
+                            <div class="mb-3">
+                                <label for="{{ form.description.id_for_label }}" class="form-label fw-medium">Descrição
+                                    Curta (Opcional)</label>
+                                {{ form.description }}
+                                {% if form.description.errors %}<div class="text-danger small mt-1">{{
+                                    form.description.errors }}</div>{% endif %}
+                            </div>
 
-                                <div class="mb-3">
-                                    <label for="{{ form.color.id_for_label }}" class="form-label fw-medium">Cor</label>
-                                    {{ form.color }}
-                                    {% if form.color.errors %}<div class="text-danger small mt-1">{{ form.color.errors
-                                        }}</div>{% endif %}
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="{{ form.description.id_for_label }}" class="form-label fw-medium">Descrição Curta (Opcional)</label>
-                                    {{ form.description }}
-                                    {% if form.description.errors %}<div class="text-danger small mt-1">{{
-                                        form.description.errors }}</div>{% endif %}
-                                </div>
-
-                                <div class="d-flex gap-3">
-                                    <button type="submit" class="btn btn-warning fw-medium px-4 py-2">
-                                        <i class="fas fa-save me-2"></i>Salvar Alterações
-                                    </button>
-                                    <a href="{% url 'list_dates' %}"
-                                        class="btn btn-outline-secondary px-4 py-2">
-                                        Cancelar
-                                    </a>
-                                </div>
-                            </form>
-                        </div>
+                            <div class="d-flex gap-3">
+                                <button type="submit" class="btn btn-warning fw-medium px-4 py-2">
+                                    <i class="fas fa-save me-2"></i>Salvar Alterações
+                                </button>
+                                <a href="{% url 'list_dates' %}" class="btn btn-outline-secondary px-4 py-2">
+                                    Cancelar
+                                </a>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
+</div>
 </div>
 
 <div class="modal fade" id="deleteImportantDateConfirmModal" tabindex="-1"

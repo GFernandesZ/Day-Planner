@@ -21,7 +21,7 @@
                         class="user-avatar bg-gradient rounded-circle d-flex align-items-center justify-content-center">
                         <span class="text-white fw-medium">J</span>
                     </div>
-                    <span class="text-dark fw-medium">Olá, João</span>
+                    <span class="text-dark fw-medium">Olá, {{ request.user.first_name|default:request.user.username }}</span>
                 </div>
             </div>
         </div>
@@ -40,7 +40,8 @@
                             {% csrf_token %}
 
                             <div class="mb-3">
-                                <label for="{{ form.title.id_for_label }}" class="form-label fw-medium">Título da Data</label>
+                                <label for="{{ form.title.id_for_label }}" class="form-label fw-medium">Título da
+                                    Data</label>
                                 {{ form.title }}
                                 {% if form.title.errors %}<div class="text-danger small mt-1">{{ form.title.errors
                                     }}</div>{% endif %}
@@ -54,14 +55,16 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="{{ form.type.id_for_label }}" class="form-label fw-medium">Tipo de Data</label>
+                                <label for="{{ form.type.id_for_label }}" class="form-label fw-medium">Tipo de
+                                    Data</label>
                                 {{ form.type }}
                                 {% if form.type.errors %}<div class="text-danger small mt-1">{{ form.type.errors }}
                                 </div>{% endif %}
                             </div>
 
                             <div class="mb-3">
-                                <label for="{{ form.category.id_for_label }}" class="form-label fw-medium">Categoria da Data</label>
+                                <label for="{{ form.category.id_for_label }}" class="form-label fw-medium">Categoria da
+                                    Data</label>
                                 {{ form.category }}
                                 {% if form.category.errors %}<div class="text-danger small mt-1">{{
                                     form.category.errors }}</div>{% endif %}
@@ -75,7 +78,8 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="{{ form.description.id_for_label }}" class="form-label fw-medium">Descrição Curta (Opcional)</label>
+                                <label for="{{ form.description.id_for_label }}" class="form-label fw-medium">Descrição
+                                    Curta (Opcional)</label>
                                 {{ form.description }}
                                 {% if form.description.errors %}<div class="text-danger small mt-1">{{
                                     form.description.errors }}</div>{% endif %}

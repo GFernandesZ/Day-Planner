@@ -17,7 +17,7 @@
                         class="user-avatar bg-gradient rounded-circle d-flex align-items-center justify-content-center">
                         <span class="text-white fw-medium">J</span>
                     </div>
-                    <span class="text-dark fw-medium">Olá, João</span>
+                    <span class="text-dark fw-medium">Olá, {{ request.user.first_name|default:request.user.username }}</span>
                 </div>
             </div>
         </div>
