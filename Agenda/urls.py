@@ -14,9 +14,9 @@ urlpatterns = [
     path('criar-data/', CreateDate.as_view(), name='create_date'),
     path('tarefas/<int:pk>/', UpdateTask.as_view(), name='update_task'),
     path('anotacao/<int:pk>/', UpdateNote.as_view(), name='update_note'),
-    path('data/<int:pk>/', UpdateDate.as_view(), name='update_date'),
+    path('datas/editar/<int:pk>/', UpdateDate.as_view(), name='update_date'),
     path('deletar-tarefa/<int:pk>/', DeleteTask.as_view(), name='delete_task'),
-    path('deletar-data/<int:pk>/', DeleteDate.as_view(), name='delete_date'),
+    path('datas/deletar/<int:pk>/', DeleteDate.as_view(), name='delete_date'),
     path('deletar-anotacao/<int:pk>/', DeleteNote.as_view(), name='delete_note'),
 ]
 

@@ -17,7 +17,7 @@ class OwnerRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
         obj = self.get_object()
         return obj.owner == self.request.user
 
-class HomeView(ListView):
+class HomeView(LoginRequiredMixin, ListView):
     model = Task
     context_object_name = 'home_tasks' 
     template_name = 'Agenda/home.html'
@@ -124,9 +124,9 @@ class ListDates(LoginRequiredMixin, ListView):
         current_month = today.month
         current_year = today.year
 
-        comemorativas_raw = all_dates_queryset.filter(
+        comemorativas_raw = Date.objects.filter(
             type='comemorativa',
-            is_fixed=True, # Apenas as fixas
+            is_fixed=True,
             date__month=current_month,
             date__year=current_year
         ).order_by('date')
@@ -230,6 +230,12 @@ class DeleteDate(OwnerRequiredMixin, DeleteView):
     model = Date
     template_name = 'Agenda/Dates/deleteDate.html'
     success_url = reverse_lazy('list_dates')
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if obj.is_fixed:
+            raise Http404("Não é possível excluir uma data fixa.")
+        return obj
 
 
 class ProfileView(LoginRequiredMixin, TemplateView):

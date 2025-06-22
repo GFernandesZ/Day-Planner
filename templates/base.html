@@ -13,8 +13,8 @@
 </head>
 
 <body class="d-flex flex-column min-vh-100">
+    {% if request.user.is_authenticated %}
     <div class="d-flex min-vh-100">
-        {% if request.user.is_authenticated %}
         <div class="sidebar bg-dark d-flex flex-column align-items-center py-3" id="sidebar">
             <div class="logo bg-white rounded-3 d-flex align-items-center justify-content-center mb-4">
                 <img src="{% static 'img/logo.png' %}" alt="Logo do site" class="img-fluid rounded"
