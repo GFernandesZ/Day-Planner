@@ -1,0 +1,316 @@
+/* src/app/home/home.page.scss */
+
+// Estilos para o cabeçalho
+ion-header {
+  ion-toolbar {
+    --background: var(--ion-color-primary); // Cor primária do seu tema Ionic
+    --color: white; // Cor do texto
+  }
+
+  .user-avatar-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ion-color-tertiary), var(--ion-color-secondary)); // Ajuste as cores
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      color: white;
+      font-weight: bold;
+    }
+  }
+}
+
+// Estilos para o Carrossel de Tarefas
+.home-task-carousel-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.home-task-carousel-wrapper {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.home-task-carousel-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.home-task-carousel-slide {
+  flex-shrink: 0;
+  margin-right: 15px;
+  box-sizing: border-box;
+  width: calc(100% / 4 - 11.25px); // Padrão para 4 cards em telas grandes
+}
+
+.carousel-arrow {
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.task-category-card {
+  min-height: 100px;
+  height: auto;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  h3 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    li.opacity-75 {
+      opacity: 0.75;
+    }
+  }
+
+  ion-button {
+    --padding-start: 0;
+    --padding-end: 0;
+    --inner-padding-end: 0;
+    --inner-padding-start: 0;
+    font-size: 0.8rem;
+    text-decoration: none;
+    opacity: 0.75;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+.task-category-card.task-box-color-low {
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  color: #155724;
+}
+
+.task-category-card.task-box-color-medium {
+  background: linear-gradient(135deg, #ffeeba, #ffc107);
+  color: #664d03;
+}
+
+.task-category-card.task-box-color-high {
+  background: linear-gradient(135deg, #f8d7da, #f5c2cb);
+  color: #721c24;
+}
+
+.task-category-card.task-box-color-urgent {
+  background: linear-gradient(135deg, #f5c2c7, #f1a9b1);
+  color: #5d1720;
+  border: 2px solid var(--ion-color-danger);
+}
+
+.note-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  ion-card-content {
+    padding: 1rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.2rem;
+  }
+
+  p {
+    font-size: 0.85rem;
+    color: var(--ion-color-medium);
+  }
+
+  small {
+    font-size: 0.75rem;
+    color: var(--ion-color-medium-shade);
+  }
+
+  ion-button {
+    --padding-start: 0;
+    --padding-end: 0;
+    font-size: 0.8rem;
+  }
+}
+
+.quote-section {
+  background: var(--ion-color-light-shade); // Cor de fundo clara
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+
+  ion-card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: var(--ion-color-danger); // ou outra cor
+  }
+
+  p {
+    font-style: italic;
+    font-size: 0.9rem;
+    color: var(--ion-color-dark);
+  }
+}
+
+// Estilos para a seção de Datas Importantes
+ion-list {
+  background: none; // Remover background padrão da lista Ionic
+}
+
+ion-item {
+  --background: none; // Remover background padrão do item Ionic
+  --border-width: 0; // Remover bordas padrão do item Ionic
+  margin-bottom: 0.5rem; // Espaçamento entre os itens da lista
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+  ion-label {
+    font-size: 0.9rem;
+    color: var(--ion-color-dark);
+  }
+
+  span.ion-text-bold {
+    font-weight: bold;
+  }
+}
+
+// Classes de cores para os itens de data (bg-light-colornome)
+.bg-light-primary {
+  background-color: #CFE2FF;
+}
+
+.bg-light-secondary {
+  background-color: #E2E3E5;
+}
+
+.bg-light-success {
+  background-color: #D4EDDA;
+}
+
+.bg-light-danger {
+  background-color: #F8D7DA;
+}
+
+.bg-light-warning {
+  background-color: #FFF3CD;
+}
+
+.bg-light-info {
+  background-color: #CCE5FF;
+}
+
+// Classes para os badges de mês (do models.py)
+.badge-january {
+  background-color: #E0F2F7;
+  color: #0E566C;
+}
+
+/* Tom mais claro */
+.badge-february {
+  background-color: #F7E0F2;
+  color: #6C0E56;
+}
+
+.badge-march {
+  background-color: #E0F7E0;
+  color: #0E6C0E;
+}
+
+.badge-april {
+  background-color: #F7E0E0;
+  color: #6C0E0E;
+}
+
+.badge-may {
+  background-color: #F2E0F7;
+  color: #560E6C;
+}
+
+.badge-june {
+  background-color: #E0F2F7;
+  color: #0E566C;
+}
+
+.badge-july {
+  background-color: #F7E0E0;
+  color: #6C0E0E;
+}
+
+.badge-august {
+  background-color: #F2F7E0;
+  color: #566C0E;
+}
+
+.badge-september {
+  background-color: #E0E0F7;
+  color: #0E0E6C;
+}
+
+.badge-october {
+  background-color: #F7F2E0;
+  color: #6C560E;
+}
+
+.badge-november {
+  background-color: #E0F7F2;
+  color: #0E6C56;
+}
+
+.badge-december {
+  background-color: #F7E0E0;
+  color: #6C0E0E;
+}
+
+
+/* Responsividade do Carrossel */
+@media (min-width: 1200px) {
+  .home-task-carousel-slide {
+    width: calc(100% / 4 - 11.25px);
+    /* 4 cards visíveis */
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .home-task-carousel-slide {
+    width: calc(100% / 3 - 10px);
+    /* 3 cards visíveis */
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .home-task-carousel-slide {
+    width: calc(100% / 2 - 7.5px);
+    /* 2 cards visíveis */
+  }
+}
+
+@media (max-width: 767.98px) {
+  .home-task-carousel-slide {
+    width: 100%;
+    /* 1 card visível */
+    margin-right: 0;
+  }
+}

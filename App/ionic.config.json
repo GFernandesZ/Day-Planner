@@ -1,0 +1,7 @@
+{
+  "name": "DayPlanner",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

@@ -1,0 +1,141 @@
+ion-content {
+    --background: linear-gradient(135deg, #FFF7ED 0%, #FEE2E2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    text-align: center;
+    min-height: 100vh;
+}
+
+ion-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    max-width: 450px;
+    width: 100%;
+    padding: 32px;
+    margin: auto;
+}
+
+// Logo container
+.logo-container {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #F97316, #DC2626);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem auto;
+}
+
+.logo-inner {
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+// Títulos e subtítulos
+ion-text h2 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #111827;
+}
+
+ion-text p {
+    color: #6B7280;
+}
+
+// Inputs
+ion-item {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+    border-bottom: none;
+    margin-bottom: 1rem;
+    background: transparent;
+    align-items: center;
+
+}
+
+ion-input {
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    font-size: 16px;
+    padding: 12px;
+    background: white;
+    flex: 1;
+    transition: all 0.3s ease;
+}
+
+ion-input:focus {
+    border-color: #F97316;
+}
+
+ion-icon[slot="start"] {
+    color: #6B7280;
+    font-size: 18px;
+    margin-right: 8px;
+}
+
+ion-button[slot="end"] {
+    --color: #6B7280;
+}
+
+ion-button[slot="end"]:hover {
+    --color: #111827;
+}
+
+
+ion-button[type="submit"] {
+    width: 100%;
+    --background: linear-gradient(135deg, #F97316, #DC2626);
+    --color: white;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+ion-button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(249, 115, 22, 0.3);
+}
+
+ion-text[color="medium"] small {
+    color: #6B7280;
+}
+
+a {
+    text-decoration: none;
+}
+
+a ion-text[color="primary"] {
+    color: #F97316;
+    font-weight: bold;
+}
+
+a ion-text[color="primary"]:hover {
+    color: #C2410C;
+}
+
+ion-label {
+    color: #374151; // cinza escuro elegante, pode trocar por var(--ion-color-dark) se quiser tema
+    font-weight: 500;
+}
+
+// Corrige o texto dos placeholders dos inputs, se necessário
+ion-input::part(native-input)::placeholder {
+    color: #9CA3AF; // cinza claro
+}
+
+
+// Corrige texto "Usuário" e "Senha" no modo stacked (quando o label fica acima)
+ion-item ion-label[position="stacked"] {
+    font-size: 14px;
+    margin-bottom: 4px;
+    color:  #374151; // cinza escuro elegante
+}

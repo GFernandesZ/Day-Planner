@@ -1,0 +1,59 @@
+<ion-content class="ion-padding ion-text-center">
+  <ion-grid>
+    <ion-row class="ion-justify-content-center">
+      <ion-col size="12" size-md="6" size-lg="4">
+        <div style="margin-bottom: 2rem;">
+          <div style="
+              width: 80px;
+              height: 80px;
+              background: linear-gradient(135deg, #ff6b35, #f7931e);
+              border-radius: 20px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              margin: 0 auto 1rem auto;
+            ">
+            <div style="
+                width: 50px;
+                height: 50px;
+                background-color: white;
+                border-radius: 10px;
+              "></div>
+          </div>
+          <ion-text>
+            <h2>Bem-vindo!</h2>
+            <p>Insira seus dados para iniciar a sessão</p>
+          </ion-text>
+        </div>
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Login</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <form (ngSubmit)="handleLogin()">
+              <ion-item>
+                <ion-icon name="person" slot="start"></ion-icon>
+                <ion-label position="stacked">Usuário</ion-label>
+                <ion-input type="text" [(ngModel)]="username" name="username"
+                  placeholder="Seu nome de usuário"></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-icon name="lock-closed" slot="start"></ion-icon>
+                <ion-label position="stacked">Senha</ion-label>
+                <ion-input [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password"
+                  placeholder="••••••••"></ion-input>
+              </ion-item>
+
+              <ion-button expand="block" type="submit" style="margin-top: 1rem;">
+                Entrar
+              </ion-button>
+            </form>
+            <ion-button (click)="irParaHome()">Ir para Home</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
