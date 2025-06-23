@@ -1,22 +1,21 @@
 from datetime import date
-import os
 from django.http import FileResponse, Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView, TemplateView
 from Agenda.consts import DAILY_QUOTES
-from Agenda.models import Task, Note, Date, QuoteOfTheDay
+from Agenda.models import Task, Note, Date
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from Agenda.forms import FormularioTask, FormularioNote, FormularioDate
-from django.core.exceptions import ObjectDoesNotExist
-from DayPlanner import settings
+from Agenda.serializers import DateSerializer, NoteSerializer, TaskSerializer
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import ListAPIView
 
 class OwnerRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
         obj = self.get_object()
         return obj.owner == self.request.user
-
 class HomeView(LoginRequiredMixin, ListView):
     model = Task
     context_object_name = 'home_tasks' 
@@ -80,7 +79,7 @@ class ListTasks(ListView, LoginRequiredMixin):
         return Task.objects.filter(owner=self.request.user).order_by('priority', 'name')
 
     def get_context_data(self, **kwargs):
-        # Prepara a lista de itens para cada tarefa para ser exibida no template
+        
         context = super().get_context_data(**kwargs)
         
         processed_categories = []
@@ -88,14 +87,14 @@ class ListTasks(ListView, LoginRequiredMixin):
             items_for_display = []
             for i in range(1, 10):
                 item_text = getattr(task_category_obj, f'item{i}_text', '')
-                if item_text: # Apenas adiciona o item se ele não estiver em branco
+                if item_text: 
                     items_for_display.append(item_text)
             
             processed_categories.append({
-                'task_obj': task_category_obj, # O objeto Task completo
-                'items_for_display': items_for_display # Lista de strings de itens não vazios
+                'task_obj': task_category_obj, 
+                'items_for_display': items_for_display 
             })
-        context['processed_task_categories'] = processed_categories # Nova variável de contexto
+        context['processed_task_categories'] = processed_categories 
 
         return context
 
@@ -118,7 +117,7 @@ class ListDates(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        all_dates_queryset = self.get_queryset() # Todas as datas, sem filtro inicial
+        all_dates_queryset = self.get_queryset() 
         
         today = date.today()
         current_month = today.month
@@ -261,3 +260,37 @@ class ProfileView(LoginRequiredMixin, TemplateView):
             context['days_of_use'] = 0
 
         return context
+
+class TaskListAPIView(ListAPIView):
+    serializer_class = TaskSerializer
+    permission_classes = [IsAuthenticated] 
+    authentication_classes = [TokenAuthentication] 
+
+    def get_queryset(self):
+        
+        return Task.objects.filter(owner=self.request.user).order_by('name')
+
+
+class NoteListAPIView(ListAPIView):
+    serializer_class = NoteSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    def get_queryset(self):
+        return Note.objects.filter(owner=self.request.user).order_by('-created_at')
+
+
+class DateListAPIView(ListAPIView):
+    serializer_class = DateSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+    
+    def get_queryset(self):
+
+        fixed_dates = Date.objects.filter(is_fixed=True, type='comemorativa').order_by('date')
+        
+
+        user_dates = Date.objects.filter(owner=self.request.user, type='importante').order_by('date')
+        
+
+        return fixed_dates.union(user_dates).order_by('date')

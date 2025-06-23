@@ -6,9 +6,9 @@ from django.conf import settings
 from Agenda.forms import CustomUserCreationForm
 from django.views.generic import CreateView
 from django.contrib import messages
-# from rest_framework.authtoken.views import ObtainAuthToken
-# from rest_framework.authtoken.models import Token
-# from rest_framework.response import Response
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
 
 class Login(View):
     def get(self, request):
@@ -51,21 +51,18 @@ class RegisterUser(CreateView):
         messages.success(self.request, 'Sua conta foi criada com sucesso! Faça login para continuar.')
         return response
 
-# class LoginAPI(ObtainAuthToken):
+class LoginAPI(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
 
-#     def post(self, request, *args, **kwargs):
-#         serializer = self.serializer_class(
-#             data=request.data,
-#             context={
-#                 'request': request
-#             }
-#         )
-#         serializer.is_valid(raise_exception=True)
-#         user = serializer.validated_data['user']
-#         token, created = Token.objects.get_or_create(user=user)
-#         return Response({
-#             'id': user.id,
-#             'nome': user.first_name,
-#             'email': user.email,
-#             'token': token.key
-#         })
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'username': user.username,
+            'email': user.email, # Acessa o campo email do User.
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+        })
