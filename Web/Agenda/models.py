@@ -37,7 +37,7 @@ class Note(models.Model):
     content = models.TextField(verbose_name='Conteúdo')
     border_color = models.CharField(
         max_length=20,
-        choices=NOTE_BORDER_COLOR_CHOICES, # Assumindo que está em consts.py
+        choices=NOTE_BORDER_COLOR_CHOICES,
         default='border-primary',
         verbose_name='Cor da Borda'
     )
@@ -69,7 +69,7 @@ class Date(models.Model):
 
     def get_month_color_class(self):
         if self.date:
-            return MONTH_COLORS.get(self.date.month, 'bg-secondary')  # Padrão cinza
+            return MONTH_COLORS.get(self.date.month, 'bg-secondary')
         return 'bg-secondary'
 
     def __str__(self):

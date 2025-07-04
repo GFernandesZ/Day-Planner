@@ -3,54 +3,11 @@ import { CommonModule } from '@angular/common';
 import { LoadingController, ToastController, IonicModule } from '@ionic/angular';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
-import { firstValueFrom } from 'rxjs'; // ✅ substituindo toPromise
+import { firstValueFrom } from 'rxjs';
+import { TaskItem, NoteItem, DateItem, MONTH_COLORS, DAILY_QUOTES } from '../interfaces/app-models';
+import { arrowForward, arrowBack } from 'ionicons/icons';
+import { addIcons } from 'ionicons';
 
-// Interfaces
-interface TaskItem {
-  id: number;
-  owner: number;
-  name: string;
-  priority: 'low' | 'medium' | 'high' | 'urgent';
-  items_list_display: string[];
-}
-
-interface NoteItem {
-  id: number;
-  owner: number;
-  title: string;
-  topic: string;
-  content: string;
-  border_color: string;
-  foto?: string;
-  foto_url: string | null;
-  created_at: string;
-}
-
-interface DateItem {
-  id: number;
-  owner: number;
-  title: string;
-  date: string;
-  description: string;
-  type: 'comemorativa' | 'importante';
-  category: string;
-  color: string;
-  is_fixed: boolean;
-  created_at: string;
-}
-
-// Constantes
-const MONTH_COLORS: { [key: number]: string } = {
-  1: 'badge-january', 2: 'badge-february', 3: 'badge-march', 4: 'badge-april',
-  5: 'badge-may', 6: 'badge-june', 7: 'badge-july', 8: 'badge-august',
-  9: 'badge-september', 10: 'badge-october', 11: 'badge-november', 12: 'badge-december',
-};
-
-const DAILY_QUOTES = [
-  "O sucesso é a soma de pequenos esforços repetidos todos os dias.",
-  "Acredite em si mesmo e tudo será possível.",
-  // ... (restante omitido por brevidade)
-];
 
 const API_BASE_URL = 'http://127.0.0.1:8000';
 
@@ -78,7 +35,13 @@ export class HomePage implements OnInit {
     private router: Router,
     private loadingController: LoadingController,
     private toastController: ToastController
-  ) { }
+  )
+  
+  { 
+
+
+    addIcons({ arrowForward, arrowBack });
+  }
 
   ngOnInit() {
     this.updateHeaderInfo();
@@ -237,6 +200,22 @@ export class HomePage implements OnInit {
     const menu = document.querySelector('ion-menu');
     if (menu) {
       (menu as any).open();
+    }
+  }
+  async deleteNote(noteId: number) {
+    const confirm = window.confirm('Tem certeza que deseja deletar esta anotação?');
+    if (!confirm) return;
+
+    const authToken = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({ Authorization: `Token ${authToken}` });
+
+    try {
+      await firstValueFrom(this.http.delete(`${API_BASE_URL}/Agenda/api/notes/delete/${noteId}/`, { headers }));
+      this.presentToast('Anotação deletada com sucesso!', 'success');
+      this.allNotes = this.allNotes.filter(note => note.id !== noteId); // remove da UI
+    } catch (error) {
+      console.error('Erro ao deletar anotação:', error);
+      this.presentToast('Erro ao deletar. Tente novamente.', 'danger');
     }
   }
 }

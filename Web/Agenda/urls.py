@@ -22,5 +22,9 @@ urlpatterns = [
     path('api/tasks/', TaskListAPIView.as_view(), name='api_tasks_list'),
     path('api/notes/', NoteListAPIView.as_view(), name='api_notes_list'),
     path('api/dates/', DateListAPIView.as_view(), name='api_dates_list'),
+    path('api/tasks/delete/<int:pk>/', DeleteTaskAPI.as_view(), name='api_delete_task'),
+    path('api/notes/delete/<int:pk>/', DeleteNoteAPI.as_view(), name='api_delete_note'),
+    path('api/dates/delete/<int:pk>/', DeleteDateAPI.as_view(), name='api_delete_date'),
+    path('api/notes/ver/<int:pk>/', ViewNoteAPI.as_view(), name='api_view_note'),
 ]
 

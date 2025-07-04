@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, RouterModule } from '@angular/router'; // Importar RouterModule para o Link
-import { FormsModule } from '@angular/forms'; // Necessário para [(ngModel)]
-import { CommonModule } from '@angular/common'; // Necessário para diretivas como *ngIf, *ngFor
-import { LoadingController, ToastController, IonicModule } from '@ionic/angular'; // Importar IonicModule
+import { Router, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { LoadingController, ToastController, IonicModule } from '@ionic/angular';
 
 // Defina a URL base da sua API Django.
-const API_BASE_URL = 'http://127.0.0.1:8000'; // Lembre-se de mudar para o IP real do seu PC se for testar em device/emulator
+const API_BASE_URL = 'http://127.0.0.1:8000';
 
 @Component({
     selector: 'app-login',

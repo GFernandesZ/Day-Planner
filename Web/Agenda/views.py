@@ -10,12 +10,13 @@ from Agenda.forms import FormularioTask, FormularioNote, FormularioDate
 from Agenda.serializers import DateSerializer, NoteSerializer, TaskSerializer
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, DestroyAPIView
 
 class OwnerRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
         obj = self.get_object()
         return obj.owner == self.request.user
+    
 class HomeView(LoginRequiredMixin, ListView):
     model = Task
     context_object_name = 'home_tasks' 
@@ -288,9 +289,43 @@ class DateListAPIView(ListAPIView):
     def get_queryset(self):
 
         fixed_dates = Date.objects.filter(is_fixed=True, type='comemorativa').order_by('date')
-        
-
         user_dates = Date.objects.filter(owner=self.request.user, type='importante').order_by('date')
-        
-
         return fixed_dates.union(user_dates).order_by('date')
+    
+class DeleteTaskAPI(DestroyAPIView):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return self.queryset.filter(owner=self.request.user)
+
+
+class DeleteNoteAPI(DestroyAPIView):
+    queryset = Note.objects.all()
+    serializer_class = NoteSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return self.queryset.filter(owner=self.request.user)
+
+
+class DeleteDateAPI(DestroyAPIView):
+    queryset = Date.objects.all()
+    serializer_class = DateSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return self.queryset.filter(owner=self.request.user, is_fixed=False)
+
+
+class ViewNoteAPI(ListAPIView):
+    serializer_class = NoteSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Note.objects.filter(owner=self.request.user).order_by('-created_at')

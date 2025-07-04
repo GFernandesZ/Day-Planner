@@ -1,17 +1,14 @@
-/* src/app/home/home.page.scss */
-
-// Estilos para o cabeçalho
 ion-header {
   ion-toolbar {
-    --background: var(--ion-color-primary); // Cor primária do seu tema Ionic
-    --color: white; // Cor do texto
+    --background: var(--ion-color-primary); 
+    --color: white; 
   }
 
   .user-avatar-circle {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--ion-color-tertiary), var(--ion-color-secondary)); // Ajuste as cores
+    background: linear-gradient(135deg, var(--ion-color-tertiary), var(--ion-color-secondary)); 
     display: flex;
     align-items: center;
     justify-content: center;
@@ -23,7 +20,7 @@ ion-header {
   }
 }
 
-// Estilos para o Carrossel de Tarefas
+
 .home-task-carousel-container {
   position: relative;
   width: 100%;
@@ -47,7 +44,7 @@ ion-header {
   flex-shrink: 0;
   margin-right: 15px;
   box-sizing: border-box;
-  width: calc(100% / 4 - 11.25px); // Padrão para 4 cards em telas grandes
+  width: calc(100% / 4 - 11.25px); 
 }
 
 .carousel-arrow {
@@ -157,7 +154,7 @@ ion-header {
 }
 
 .quote-section {
-  background: var(--ion-color-light-shade); // Cor de fundo clara
+  background: var(--ion-color-light-shade); 
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   padding: 1rem;
@@ -165,7 +162,7 @@ ion-header {
   ion-card-title {
     font-size: 1.1rem;
     font-weight: bold;
-    color: var(--ion-color-danger); // ou outra cor
+    color: var(--ion-color-danger); 
   }
 
   p {
@@ -175,15 +172,15 @@ ion-header {
   }
 }
 
-// Estilos para a seção de Datas Importantes
+
 ion-list {
-  background: none; // Remover background padrão da lista Ionic
+  background: none; 
 }
 
 ion-item {
-  --background: none; // Remover background padrão do item Ionic
-  --border-width: 0; // Remover bordas padrão do item Ionic
-  margin-bottom: 0.5rem; // Espaçamento entre os itens da lista
+  --background: none; 
+  --border-width: 0; 
+  margin-bottom: 0.5rem; 
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 
@@ -197,7 +194,7 @@ ion-item {
   }
 }
 
-// Classes de cores para os itens de data (bg-light-colornome)
+
 .bg-light-primary {
   background-color: #CFE2FF;
 }
@@ -222,13 +219,13 @@ ion-item {
   background-color: #CCE5FF;
 }
 
-// Classes para os badges de mês (do models.py)
+
 .badge-january {
   background-color: #E0F2F7;
   color: #0E566C;
 }
 
-/* Tom mais claro */
+
 .badge-february {
   background-color: #F7E0F2;
   color: #6C0E56;
@@ -285,32 +282,32 @@ ion-item {
 }
 
 
-/* Responsividade do Carrossel */
+
 @media (min-width: 1200px) {
   .home-task-carousel-slide {
     width: calc(100% / 4 - 11.25px);
-    /* 4 cards visíveis */
+   
   }
 }
 
 @media (min-width: 992px) and (max-width: 1199.98px) {
   .home-task-carousel-slide {
     width: calc(100% / 3 - 10px);
-    /* 3 cards visíveis */
+    
   }
 }
 
 @media (min-width: 768px) and (max-width: 991.98px) {
   .home-task-carousel-slide {
     width: calc(100% / 2 - 7.5px);
-    /* 2 cards visíveis */
+   
   }
 }
 
 @media (max-width: 767.98px) {
   .home-task-carousel-slide {
     width: 100%;
-    /* 1 card visível */
+    
     margin-right: 0;
   }
 }

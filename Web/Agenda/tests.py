@@ -35,7 +35,7 @@ class ModelTests(TestCase):
         self.assertEqual(task.item9_text, "")
         self.assertEqual(task.owner, self.user)
         self.assertEqual(str(task), "Tarefa P Criada ")
-        self.assertEqual(task.get_box_color_class(), "task-box-color-medium") # Testa método
+        self.assertEqual(task.get_box_color_class(), "task-box-color-medium") 
 
     def test_note_model_creation(self):
         """Testa a criação de um objeto Note."""
@@ -242,6 +242,6 @@ class ViewTests(TestCase):
             owner=self.user, title="Data para Deletar", date=timezone.now(), type="importante"
         )
         self.client.login(username='testuser', password='testpassword')
-        response = self.client.post(reverse('delete_date', kwargs={'pk': date_to_delete.pk})) # CORRIGIDO
+        response = self.client.post(reverse('delete_date', kwargs={'pk': date_to_delete.pk})) 
         self.assertEqual(response.status_code, 302) 
         self.assertFalse(Date.objects.filter(pk=date_to_delete.pk).exists())

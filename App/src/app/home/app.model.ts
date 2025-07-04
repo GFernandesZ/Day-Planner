@@ -1,12 +1,9 @@
 interface TaskItem {
   id: number;
-  owner: number; // PK do owner
-  name: string; // Nome da categoria da tarefa
-  priority: 'low' | 'medium' | 'high' | 'urgent'; // Prioridade da categoria
-  items_list_display: string[]; // Lista de strings dos itens
-  // Se 'itemX_text' são campos diretos no modelo, o serializer pode retorná-los diretamente
-  // item1_text?: string;
-  // item2_text?: string; // e assim por diante
+  owner: number;
+  name: string;
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  items_list_display: string[]; 
 }
 
 interface NoteItem {
@@ -15,26 +12,26 @@ interface NoteItem {
   title: string;
   topic: string;
   content: string;
-  border_color: string; // Ex: 'border-primary'
-  foto?: string; // O caminho do arquivo de foto, como salvo no banco
-  foto_url: string | null; // A URL completa para exibir a foto
-  created_at: string; // Data string ISO
+  border_color: string;
+  foto?: string; 
+  foto_url: string | null;
+  created_at: string; 
 }
 
 interface DateItem {
   id: number;
   owner: number;
   title: string;
-  date: string; // Data string ISO
+  date: string;
   description: string;
   type: 'comemorativa' | 'importante';
   category: string;
-  color: string; // Ex: 'success', 'danger'
+  color: string; 
   is_fixed: boolean;
   created_at: string;
 }
 
-// Mapeamento de cores para meses (copiado do Django models.py)
+
 const MONTH_COLORS: { [key: number]: string } = {
   1: 'badge-january',
   2: 'badge-february',
@@ -50,7 +47,6 @@ const MONTH_COLORS: { [key: number]: string } = {
   12: 'badge-december',
 };
 
-// Frases do Dia (copiado do Django views.py)
 const DAILY_QUOTES = [
   "O sucesso é a soma de pequenos esforços repetidos todos os dias.",
   "Acredite em si mesmo e tudo será possível.",
